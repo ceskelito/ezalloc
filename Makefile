@@ -2,27 +2,34 @@ NAME	= libezalloc.a
 AR		= ar -rcs
 CC		= gcc
 RM		= rm -f
+MKDIR	= mkdir -p
 
 CFLAGS	= -Wall -Wextra -Werror
-IFLAGS	= -I. -Iinternal -Iinternal/include -Itest
+IFLAGS	= -Iinclude -Iinclude/internal
+SDIR 	= srcs
+ODIR 	= objs
 
 FILES	= 	ezalloc \
-			internal/internal_ezalloc
+			internal_ezalloc
 
-SRCS	= $(addsuffix .c, $(FILES))
-OBJS	= $(addsuffix .o, $(FILES))
+SRCS	= $(addprefix $(SDIR)/,$(addsuffix .c, $(FILES)))
+OBJS	= $(addprefix $(ODIR)/,$(addsuffix .o, $(FILES)))
 
 all: $(NAME)
 
-%.o: %.c
+$(ODIR)/%.o: $(SDIR)/%.c | $(ODIR)
 	$(CC) -c $(CFLAGS) $(IFLAGS) $< -o $@
+	
+$(ODIR):
+	$(MKDIR) $@
 
 $(NAME): $(OBJS)
 	$(AR) $@ $^
 	
 clean:
 	$(RM) $(OBJS)
-
+	$(RM) -r $(ODIR)
+	
 fclean: clean
 	$(RM) $(NAME)
 
