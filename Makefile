@@ -10,7 +10,7 @@ SDIR 	= srcs
 ODIR 	= objs
 
 FILES	= 	ezalloc \
-			internal_ezalloc
+			ezalloc_internal
 
 SRCS	= $(addprefix $(SDIR)/,$(addsuffix .c, $(FILES)))
 OBJS	= $(addprefix $(ODIR)/,$(addsuffix .o, $(FILES)))
