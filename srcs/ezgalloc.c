@@ -9,7 +9,7 @@ void    *ezg_alloc(char *name, size_t size)
 void	*ezg_calloc(char *name, size_t size, size_t count)
 {
 	char	*new_ptr;
-    int     i;
+    size_t  i;
 
 	new_ptr = ezg_alloc_handler(size * count, NEW, NO_TARGET, name);
 	if (!new_ptr)
@@ -39,6 +39,11 @@ void	ezg_clean_group(char *name)
 }
 
 void    ezg_cleanup(void)
+{
+    ezg_alloc_handler(NO_BYTES, CLEANALL, NO_TARGET, NO_GROUP);
+}
+
+void    ezg_clean(void)
 {
     ezg_alloc_handler(NO_BYTES, CLEANALL, NO_TARGET, NO_GROUP);
 }
