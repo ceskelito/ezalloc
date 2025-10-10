@@ -1,22 +1,7 @@
 #ifndef EZALLOC_H
 # define EZALLOC_H
 
-# include <stdlib.h>
-
-typedef enum e_mode
-{
-	NEW,
-	CLEAN,
-	RELEASE,
-	ADD
-} t_mode;
-
-/* garbage collector node */
-typedef struct s_alloc
-{
-	void			*ptr;
-	struct s_alloc	*next;
-}	t_alloc;
+# include <stddef.h> // size_t definition
 
 /* Allocates size bytes of memory with malloc() and saves
 ** the pointer in a static linked list, before returning it.
@@ -37,6 +22,6 @@ void	*ez_add(void *ptr);
 void	ez_free(void	*ptr);
 
 /* Frees all the memory previously allocated by ezalloc and ezcalloc. */
-void	ez_clean(void);
+void	ez_cleanup(void);
 
 #endif
