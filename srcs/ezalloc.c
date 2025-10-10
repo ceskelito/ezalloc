@@ -1,6 +1,12 @@
 #include "ezalloc.h"
 #include "ezalloc_internal.h"
 
+
+static inline void	*ez_alloc_handler(size_t size, int mode, void *target)
+{
+	return (allocation_handler(size, mode, target, NO_GROUP));
+}
+
 void	*ez_alloc(size_t size)
 {
 	return (ez_alloc_handler(size, NEW, NO_TARGET));
@@ -36,5 +42,5 @@ void	ez_free(void *ptr)
 
 void	ez_cleanup(void)
 {
-	ez_alloc_handler(NO_BYTES, CLEAN, NO_TARGET);
+	ez_alloc_handler(NO_BYTES, CLEANUP, NO_TARGET);
 }

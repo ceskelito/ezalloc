@@ -11,8 +11,7 @@ ODIR 	= objs
 
 FILES	= 	ezalloc \
 			allocation_handler_internal \
-			handler_wrapper_internal
-
+			group_handler_internal
 SRCS	= $(addprefix $(SDIR)/,$(addsuffix .c, $(FILES)))
 OBJS	= $(addprefix $(ODIR)/,$(addsuffix .o, $(FILES)))
 

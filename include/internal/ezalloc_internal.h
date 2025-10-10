@@ -2,17 +2,22 @@
 # define EZALLOC_INTERNAL_H
 
 # include <stdlib.h>
+# include <string.h>
 
-# define NO_BYTES 0
-# define NO_TARGET NULL
+# define NO_BYTES	0
+# define NO_TARGET	NULL
+# define NO_GROUP	NULL
 
-typedef enum e_mode
+typedef enum e_action
 {
 	NEW,
-	CLEAN,
+	CLEANUP,
 	RELEASE,
-	ADD
-} t_mode;
+	ADD,
+	CREATE,		// only for groups
+	CLEANALL	// only for groups
+} t_action;
+
 
 /* garbage collector node */
 typedef struct s_alloc
@@ -21,12 +26,20 @@ typedef struct s_alloc
 	struct s_alloc	*next;
 }	t_alloc;
 
-/* garbage group node */
+/* garbage node */
 typedef struct s_garbage
 {
-  t_alloc         *head;
-  t_alloc         *tail;
+	t_alloc         *head;
+	t_alloc         *tail;
 } t_garbage;
+
+/* garbage group node */
+typedef struct s_group
+{
+	t_garbage		*garbage;
+	char            *name;
+	struct s_group  *next;
+} t_group;
 
 /*
  * allocation_handler - Global allocation handler
@@ -35,7 +48,7 @@ typedef struct s_garbage
  * keeping track of every allocated pointer for automatic cleanup.
  *
  * @size:   Number of bytes to allocate (used only in NEW mode).
- * @mode:   Operation to perform (e.g. NEW, ADD, CLEAN, RELEASE).
+ * @mode:   Operation to perform (e.g. NEW, ADD, CLEANUP, RELEASE).
  * @target: Pointer to add or release, depending on mode.
  *          Must be NULL for allocation or cleanup operations.
  * @ext_g:  Optional external garbage collector context.
@@ -49,6 +62,6 @@ typedef struct s_garbage
 void	*allocation_handler(size_t size, int mode, void *target, t_garbage *ext_g);
 
 //		Wrapper of allocation handler
-void	*ez_alloc_handler(size_t size, int mode, void *target);
-void	*ezg_alloc_handler(size_t size, int mode, void *target, t_garbage *ext_g);
+//void	*ez_alloc_handler(size_t size, int mode, void *target);
+void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name);
 #endif

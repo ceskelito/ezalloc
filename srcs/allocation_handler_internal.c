@@ -93,7 +93,7 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *ext_g)
 		safe_new_node(&g->head, &g->tail, target);
 		return (target);
 	}
-	else if (mode == CLEAN)
+	else if (mode == CLEANUP)
 		clean_garbage_list(g->head);
 	else if (mode == RELEASE)
 		clean_garbage_node(&g->head, target);
