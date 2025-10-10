@@ -3,6 +3,9 @@
 
 # include <stdlib.h>
 
+# define NO_BYTES 0
+# define NO_TARGET NULL
+
 typedef enum e_mode
 {
 	NEW,
@@ -26,7 +29,7 @@ typedef struct s_garbage
 } t_garbage;
 
 /*
- * ezalloc_handler - Global allocation handler
+ * allocation_handler - Global allocation handler
  *
  * This function centralizes all memory allocations and releases,
  * keeping track of every allocated pointer for automatic cleanup.
@@ -43,7 +46,9 @@ typedef struct s_garbage
  * Return:  Pointer to the allocated memory, or NULL if allocation fails
  *          or if the operation does not produce a new allocation.
  */
-void	*ezalloc_handler(size_t size, int mode, void *target, t_garbage *ext_g);
+void	*allocation_handler(size_t size, int mode, void *target, t_garbage *ext_g);
 
-
+//		Wrapper of allocation handler
+void	*ez_alloc_handler(size_t size, int mode, void *target);
+void	*ezg_alloc_handler(size_t size, int mode, void *target, t_garbage *ext_g);
 #endif

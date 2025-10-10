@@ -3,7 +3,7 @@
 
 void	*ez_alloc(size_t size)
 {
-	return (ezalloc_handler(size, NEW, NULL, NULL));
+	return (ez_alloc_handler(size, NEW, NO_TARGET));
 }
 
 void	*ez_calloc(size_t size, size_t count)
@@ -11,7 +11,7 @@ void	*ez_calloc(size_t size, size_t count)
 	char	*new_ptr;
 	size_t	i;
 
-	new_ptr = ezalloc_handler(size * count, NEW, NULL, NULL);
+	new_ptr = ez_alloc_handler(size * count, NEW, NO_TARGET);
 	if (!new_ptr)
 		return (NULL);
 	i = 0;
@@ -25,16 +25,16 @@ void	*ez_calloc(size_t size, size_t count)
 
 void	*ez_add(void	*ptr)
 {
-	ezalloc_handler(0, ADD, ptr, NULL);
+	ez_alloc_handler(NO_BYTES, ADD, ptr);
 	return (ptr);
 }
 
 void	ez_free(void *ptr)
 {
-	ezalloc_handler(0, RELEASE, ptr, NULL);
+	ez_alloc_handler(NO_BYTES, RELEASE, ptr);
 }
 
 void	ez_cleanup(void)
 {
-	ezalloc_handler(0, CLEAN, NULL, NULL);
+	ez_alloc_handler(NO_BYTES, CLEAN, NO_TARGET);
 }
