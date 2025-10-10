@@ -25,21 +25,24 @@ typedef struct s_garbage
   t_alloc         *tail;
 } t_garbage;
 
-/* Global Allocation Handler
-
- * This function will perform all the memory's allocations and frees,
- * keeping track of every action performed. 
-
- * size:	Number of bytes to alloc.
- * mode:	The action to be performed.
- * target:	The pointer to free or add. NULL if is an allocation or a cleanup.
- * ext_g:	The eventually external list of allocated memory.
- * 			If NULL the handler will use his internal static variable instead.
- * 			It will be NULL only if the handler is called from the ezg_*
- * 			group of functions.
- 
- * Return Value: The alloc'd memory. NULL if fails or if is a deallocation action.
-*/
+/*
+ * ezalloc_handler - Global allocation handler
+ *
+ * This function centralizes all memory allocations and releases,
+ * keeping track of every allocated pointer for automatic cleanup.
+ *
+ * @size:   Number of bytes to allocate (used only in NEW mode).
+ * @mode:   Operation to perform (e.g. NEW, ADD, CLEAN, RELEASE).
+ * @target: Pointer to add or release, depending on mode.
+ *          Must be NULL for allocation or cleanup operations.
+ * @ext_g:  Optional external garbage collector context.
+ *          If NULL, the internal static context will be used instead.
+ *          It should be non-NULL only when called from ezg_* family of functions
+ * 			(which maintain their own, grouped, allocation lists).
+ *
+ * Return:  Pointer to the allocated memory, or NULL if allocation fails
+ *          or if the operation does not produce a new allocation.
+ */
 void	*ezalloc_handler(size_t size, int mode, void *target, t_garbage *ext_g);
 
 
