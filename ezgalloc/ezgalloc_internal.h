@@ -7,7 +7,7 @@ typedef enum e_mode
 {
 	ADD,
 	CLEAN_ALL,
-	CLEAN_GROUP;
+	CLEAN_GROUP,
 	CREATE,
 	NEW,
 	RELEASE,
