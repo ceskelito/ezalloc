@@ -1,5 +1,5 @@
 #include "ezalloc.h"
-#include "internal_ezalloc.h"
+#include "ezalloc_internal.h"
 
 void	*ez_alloc(size_t size)
 {
