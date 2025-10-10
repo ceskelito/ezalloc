@@ -68,34 +68,30 @@ static void	clean_garbage_node(t_alloc **head, void *target_to_free)
 	}
 }
 
-void	*allocation_handler(size_t size, int mode, void *target, t_garbage *ext_g)
+void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage)
 {
-	static t_garbage	garbage;
-	t_garbage			*g;
-	void				*new_ptr;
+	void	*new_ptr;
 
-	if (ext_g)
-		g = ext_g;
-	else
-		g = &garbage;
+	if (!garbage)
+		return (NULL);
 	if (mode == NEW)
 	{
 		new_ptr = malloc(size);
 		if (!new_ptr)
 			return (NULL);
-		safe_new_node(&g->head, &g->tail, new_ptr);
+		safe_new_node(&garbage->head, &garbage->tail, new_ptr);
 		return (new_ptr);
 	}
 	else if (mode == ADD)
 	{
 		if (!target)
 			return (NULL);
-		safe_new_node(&g->head, &g->tail, target);
+		safe_new_node(&garbage->head, &garbage->tail, target);
 		return (target);
 	}
 	else if (mode == CLEANUP)
-		clean_garbage_list(g->head);
+		clean_garbage_list(garbage->head);
 	else if (mode == RELEASE)
-		clean_garbage_node(&g->head, target);
+		clean_garbage_node(&garbage->head, target);
 	return (NULL);
 }

@@ -2,7 +2,7 @@
 # define EZALLOC_INTERNAL_H
 
 # include <stdlib.h>
-# include <string.h>
+# include <string.h>	
 
 # define NO_BYTES	0
 # define NO_TARGET	NULL
@@ -47,19 +47,16 @@ typedef struct s_group
  * This function centralizes all memory allocations and releases,
  * keeping track of every allocated pointer for automatic cleanup.
  *
- * @size:   Number of bytes to allocate (used only in NEW mode).
- * @mode:   Operation to perform (e.g. NEW, ADD, CLEANUP, RELEASE).
- * @target: Pointer to add or release, depending on mode.
- *          Must be NULL for allocation or cleanup operations.
- * @ext_g:  Optional external garbage collector context.
- *          If NULL, the internal static context will be used instead.
- *          It should be non-NULL only when called from ezg_* family of functions
- * 			(which maintain their own, grouped, allocation lists).
+ * @size:    Number of bytes to allocate (used only in NEW mode).
+ * @mode:    Operation to perform (e.g. NEW, ADD, CLEANUP, RELEASE).
+ * @target:  Pointer to add or release, depending on mode.
+ *           Must be NULL for allocation or cleanup operations.
+ * @garbage: Garbage collector context. Can't be NULL.
  *
  * Return:  Pointer to the allocated memory, or NULL if allocation fails
  *          or if the operation does not produce a new allocation.
  */
-void	*allocation_handler(size_t size, int mode, void *target, t_garbage *ext_g);
+void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage);
 
 //		Wrapper of allocation handler
 //void	*ez_alloc_handler(size_t size, int mode, void *target);

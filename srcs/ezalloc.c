@@ -2,9 +2,10 @@
 #include "ezalloc_internal.h"
 
 
-static inline void	*ez_alloc_handler(size_t size, int mode, void *target)
-{
-	return (allocation_handler(size, mode, target, NO_GROUP));
+static void	*ez_alloc_handler(size_t size, int mode, void *target)
+{	
+	static t_garbage	garbage;
+	return (allocation_handler(size, mode, target, &garbage));
 }
 
 void	*ez_alloc(size_t size)
