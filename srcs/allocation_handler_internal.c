@@ -40,7 +40,7 @@ static void	cleanup_list(t_alloc *head)
 	}
 }
 
-static void	release_node(t_alloc **head, void *target_data)
+static void	release_node(t_alloc **head, t_alloc **tail, void *target_data)
 {
 	t_alloc	*curr;
 	t_alloc	*prev;
@@ -53,6 +53,8 @@ static void	release_node(t_alloc **head, void *target_data)
 	{
 		if (curr->data == target_data)
 		{
+			if (curr == *tail)
+				*tail = prev;
 			if (curr == *head)
 				*head = curr->next;
 			else
@@ -89,7 +91,7 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage
 	}
 	else if (mode == RELEASE)
 	{		
-		release_node(&garbage->head, target);
+		release_node(&garbage->head, &garbage->tail, target);
 	}
 	return (NULL);
 }
