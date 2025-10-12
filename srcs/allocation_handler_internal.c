@@ -10,10 +10,10 @@ static t_alloc	*new_node(void	*ptr)
 	return (node);
 }
 
-static t_alloc *safe_new_node(t_alloc **head, t_alloc **tail, void *ptr)
+static void	safe_new_node(t_alloc **head, t_alloc **tail, void *ptr)
 {
 	if (!ptr)
-		return (NULL);
+		return ;
 	if (!*head)
 	{
 		*head = new_node(ptr);
@@ -24,11 +24,9 @@ static t_alloc *safe_new_node(t_alloc **head, t_alloc **tail, void *ptr)
 		(*tail)->next = new_node(ptr);
 		*tail = (*tail)->next;
 	}
-	return (ptr);
-
 }
 
-static void	clean_garbage_list(t_alloc *head)
+static void	cleanup_list(t_alloc *head)
 {
 	t_alloc	*tmp;
 
@@ -42,18 +40,18 @@ static void	clean_garbage_list(t_alloc *head)
 	}
 }
 
-static void	clean_garbage_node(t_alloc **head, void *target_to_free)
+static void	release_node(t_alloc **head, void *target_data)
 {
 	t_alloc	*curr;
 	t_alloc	*prev;
 
-	if (target_to_free == NULL)
+	if (!target_data)
 		return ;
 	curr = *head;
 	prev = NULL;
-	while (curr != NULL)
+	while (curr)
 	{
-		if (curr->data == target_to_free)
+		if (curr->data == target_data)
 		{
 			if (curr == *head)
 				*head = curr->next;
@@ -77,21 +75,21 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage
 	if (mode == NEW)
 	{
 		new_ptr = malloc(size);
-		if (!new_ptr)
-			return (NULL);
 		safe_new_node(&garbage->head, &garbage->tail, new_ptr);
 		return (new_ptr);
 	}
 	else if (mode == ADD)
 	{
-		if (!target)
-			return (NULL);
 		safe_new_node(&garbage->head, &garbage->tail, target);
 		return (target);
 	}
 	else if (mode == CLEANUP)
-		clean_garbage_list(garbage->head);
+	{	
+		cleanup_list(garbage->head);
+	}
 	else if (mode == RELEASE)
-		clean_garbage_node(&garbage->head, target);
+	{		
+		release_node(&garbage->head, target);
+	}
 	return (NULL);
 }
