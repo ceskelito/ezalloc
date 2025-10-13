@@ -30,15 +30,15 @@ void	*ez_calloc(size_t size, size_t count)
 	return ((void *)new_ptr);
 }
 
-void	*ez_add(void	*ptr)
+void	*ez_add(void	*data)
 {
-	ez_alloc_handler(NO_BYTES, ADD, ptr);
-	return (ptr);
+	ez_alloc_handler(NO_BYTES, ADD, data);
+	return (data);
 }
 
-void	ez_release(void *ptr)
+void	ez_release(void *data)
 {
-	ez_alloc_handler(NO_BYTES, RELEASE, ptr);
+	ez_alloc_handler(NO_BYTES, RELEASE, data);
 }
 
 void	ez_cleanup(void) 

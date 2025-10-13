@@ -11,11 +11,11 @@
 typedef enum e_action
 {
 	NEW,
-	CLEANUP,
-	RELEASE,
 	ADD,
-	CREATE,		// only for groups
-	CLEANALL	// only for groups
+	RELEASE,
+	CLEANUP,
+	CREATE_GROUP,	// only for groups
+	RELEASE_GROUP	// only for groups
 } t_action;
 
 

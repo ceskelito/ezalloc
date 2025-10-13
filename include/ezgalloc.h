@@ -27,7 +27,7 @@ int		ezg_create_group(char *tag);
 
 /* Search for the pointer in the "group" list, and frees the pointer and the node itself;
  * after removed the node from the list */
-//void	ezg_free(char *group, void	*ptr);
+//void	ezg_release(char *group, void	*ptr);
 
 /* Frees all the memory previously allocated by ezg_alloc and ezg_calloc
 ** in the ${tag} named linked list and delete the list itself. */

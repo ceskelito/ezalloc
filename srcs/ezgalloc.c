@@ -23,27 +23,22 @@ void	*ezg_calloc(char *name, size_t size, size_t count)
 	return ((void *)new_ptr);
 }
 
-void    *ezg_add(char *name, void *target)
+void    *ezg_add(char *name, void *data)
 {
-    return (ezg_alloc_handler(NO_BYTES, ADD, target, name));
+    return (ezg_alloc_handler(NO_BYTES, ADD, data, name));
 }
 
-void	ezg_free(char *name, void *ptr)
+void	ezg_release(char *name, void *data)
 {
-	ezg_alloc_handler(NO_BYTES, RELEASE, ptr, name);
+	ezg_alloc_handler(NO_BYTES, RELEASE, data, name);
 }
 
-void	ezg_clean_group(char *name)
+void	ezg_release_group(char *name)
 {
-	ezg_alloc_handler(NO_BYTES, CLEANUP, NO_TARGET, name);
+	ezg_alloc_handler(NO_BYTES, RELEASE_GROUP, NO_TARGET, name);
 }
 
 void    ezg_cleanup(void)
 {
-    ezg_alloc_handler(NO_BYTES, CLEANALL, NO_TARGET, NO_GROUP);
-}
-
-void    ezg_clean(void)
-{
-    ezg_alloc_handler(NO_BYTES, CLEANALL, NO_TARGET, NO_GROUP);
+    ezg_alloc_handler(NO_BYTES, CLEANUP, NO_TARGET, NO_GROUP);
 }
