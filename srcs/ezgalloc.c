@@ -1,44 +1,58 @@
 #include "ezalloc_internal.h"
 #include "ezgalloc.h"
+#include <stdint.h>
+#include <string.h>
+
+static void	zero_memory(void *ptr, size_t total_size)
+{
+	if (!ptr)
+		return;
+	memset(ptr, 0, total_size);
+}
 
 void    *ezg_alloc(char *name, size_t size)
 {
-    return(ezg_alloc_handler(size, NEW, NO_TARGET, name));
+    return(ezg_alloc_handler(size, NEW, NO_DATA, name));
 }
 
 void	*ezg_calloc(char *name, size_t size, size_t count)
 {
-	char	*new_ptr;
-    int     i;
+	void	*new_ptr;
 
-	new_ptr = ezg_alloc_handler(size * count, NEW, NO_TARGET, name);
-	if (!new_ptr)
+	if (count != 0 && size > SIZE_MAX / count)
 		return (NULL);
-	i = 0;
-	while (i < size * count)
-	{
-		new_ptr[i] = 0;
-		++i;
-	}
-	return ((void *)new_ptr);
+	new_ptr = ezg_alloc_handler(size * count, NEW, NO_DATA, name);
+	zero_memory(new_ptr, size * count);
+	return (new_ptr);
 }
 
-void    *ezg_add(char *name, void *target)
+void    *ezg_add(char *name, void *data)
 {
-    return (ezg_alloc_handler(NO_BYTES, ADD, target, name));
+    return (ezg_alloc_handler(NO_BYTES, ADD, data, name));
 }
 
-void	ezg_free(char *name, void *ptr)
+void	ezg_release(char *name, void *data)
 {
-	ezg_alloc_handler(NO_BYTES, RELEASE, ptr, name);
+	ezg_alloc_handler(NO_BYTES, RELEASE, data, name);
 }
 
-void	ezg_clean_group(char *name)
+int 	ezg_group_create(char *name)
 {
-	ezg_alloc_handler(NO_BYTES, CLEANUP, NO_TARGET, name);
+	ezg_alloc_handler(NO_BYTES, CREATE_GROUP, NO_DATA, name);
+	return 0;
+}
+
+void	ezg_group_release(char *name)
+{
+	ezg_alloc_handler(NO_BYTES, RELEASE_GROUP, NO_DATA, name);
+}
+
+void	ezg_group_delete(char *name)
+{
+	ezg_alloc_handler(NO_BYTES, DELETE_GROUP, NO_DATA, name);
 }
 
 void    ezg_cleanup(void)
 {
-    ezg_alloc_handler(NO_BYTES, CLEANALL, NO_TARGET, NO_GROUP);
+    ezg_alloc_handler(NO_BYTES, CLEANUP, NO_DATA, NO_GROUP);
 }

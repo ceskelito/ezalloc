@@ -5,17 +5,18 @@
 # include <string.h>	
 
 # define NO_BYTES	0
-# define NO_TARGET	NULL
+# define NO_DATA	NULL
 # define NO_GROUP	NULL
 
 typedef enum e_action
 {
 	NEW,
-	CLEANUP,
-	RELEASE,
 	ADD,
-	CREATE,		// only for groups
-	CLEANALL	// only for groups
+	RELEASE,
+	CLEANUP,
+	CREATE_GROUP,	// only for groups
+	RELEASE_GROUP,	// only for groups
+	DELETE_GROUP	// only for groups
 } t_action;
 
 
@@ -39,6 +40,7 @@ typedef struct s_group
 	t_garbage		*garbage;
 	char            *name;
 	struct s_group  *next;
+	struct s_group	*prev;
 } t_group;
 
 /*
@@ -58,7 +60,5 @@ typedef struct s_group
  */
 void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage);
 
-//		Wrapper of allocation handler
-//void	*ez_alloc_handler(size_t size, int mode, void *target);
 void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name);
 #endif
