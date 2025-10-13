@@ -42,7 +42,10 @@ static t_group *safe_new_group(t_group **head, t_group **tail, char *name)
     t_group *group;
 
     if (get_group(*head, name))
+    {
+    	perror("ezalloc: trying to create a group with an existent name");
 		return (NULL);
+	}
     group = malloc(sizeof(t_group));
     if (!group)
 		return (NULL);
@@ -94,7 +97,7 @@ void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
 	        groups_head = group;
 	    }
 	    groups_tail = NULL;
-	    return NULL;
+	    return (NULL);
 	}
 	else if (!name)
     {
@@ -107,7 +110,7 @@ void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
 		{
 		    perror("ezalloc: failed to create group");
 		}
-		return NULL;
+		return (NULL);
     }
     else if (!(group = get_group(groups_head, name)))
     {
@@ -116,7 +119,7 @@ void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
     }
     if (mode == RELEASE_GROUP)
     {
-        allocation_handler(size, CLEANUP, NO_DATA, group->garbage);
+    	allocation_handler(size, CLEANUP, NO_DATA, group->garbage);
     }
     else if (mode == DELETE_GROUP)
     {
@@ -125,7 +128,7 @@ void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
     }
     else
     {
-      return (allocation_handler(size, mode, target, group->garbage));
+		return (allocation_handler(size, mode, target, group->garbage));
     }
     return (NULL);
 }
