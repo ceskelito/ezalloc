@@ -40,9 +40,6 @@ $(TEST_BIN): $(NAME) $(TEST_SRC)
 run-test: $(TEST_BIN)
 	valgrind $(VAL_FLAGS) ./$(TEST_BIN)
 
-run-test-file: $(TEST_BIN)
-	vlagrind $(VAL_FLAGS) ./$(TEST_BIN) 2>valout.py
-	
 clean:
 	$(RM) $(OBJS)
 	$(RM) -r $(ODIR)
