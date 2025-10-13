@@ -36,7 +36,7 @@ void	*ez_add(void	*ptr)
 	return (ptr);
 }
 
-void	ez_free(void *ptr)
+void	ez_release(void *ptr)
 {
 	ez_alloc_handler(NO_BYTES, RELEASE, ptr);
 }

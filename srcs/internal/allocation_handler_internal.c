@@ -47,7 +47,6 @@ static void	cleanup_list(t_garbage *garbage)
         free(tmp);
         tmp = garbage->head;
     }
-    /* important: reset both head and tail to avoid dangling pointers */
     garbage->head = NULL;
     garbage->tail = NULL;
 }

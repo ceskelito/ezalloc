@@ -19,7 +19,7 @@ void	*ez_add(void *ptr);
 
 /* Search for the pointer in the list, and frees the pointer and the node itself;
  * after removed the node from the list */
-void	ez_free(void	*ptr);
+void	ez_release(void	*ptr);
 
 /* Frees all the memory previously allocated by ezalloc and ezcalloc. */
 void	ez_cleanup(void);

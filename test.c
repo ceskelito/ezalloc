@@ -134,30 +134,30 @@ void test_ez_add(void)
 	// Note: The added pointer will be freed by ez_cleanup
 }
 
-/* Test ez_free function */
+/* Test ez_release function */
 void test_ez_free(void)
 {
-	print_test_header("ez_free()");
+	print_test_header("ez_release()");
 	
 	// Test freeing a single allocation
 	int *ptr1 = (int *)ez_alloc(sizeof(int));
-	assert_test(ptr1 != NULL, "Allocate memory for ez_free test");
+	assert_test(ptr1 != NULL, "Allocate memory for ez_release test");
 	
 	if (ptr1)
 	{
 		*ptr1 = 55;
-		ez_free(ptr1);
-		assert_test(1, "ez_free executes without crashing");
-		// Note: After ez_free, ptr1 is invalid and should not be used
+		ez_release(ptr1);
+		assert_test(1, "ez_release executes without crashing");
+		// Note: After ez_release, ptr1 is invalid and should not be used
 	}
 	
 	// Test freeing NULL
-	ez_free(NULL);
-	assert_test(1, "ez_free handles NULL pointer without crashing");
+	ez_release(NULL);
+	assert_test(1, "ez_release handles NULL pointer without crashing");
 	
 	// Test allocation after free
 	int *ptr2 = (int *)ez_alloc(sizeof(int) * 5);
-	assert_test(ptr2 != NULL, "Can allocate after ez_free");
+	assert_test(ptr2 != NULL, "Can allocate after ez_release");
 }
 
 /* Test ez_cleanup function */
@@ -270,7 +270,7 @@ void test_integration(void)
 	}
 	
 	// Free one specific pointer
-	ez_free(regular1);
+	ez_release(regular1);
 	
 	// Rest should still be fine
 	if (regular2 && external)
@@ -281,7 +281,7 @@ void test_integration(void)
 	
 	// Allocate more after free
 	int *new_alloc = (int *)ez_alloc(sizeof(int));
-	assert_test(new_alloc != NULL, "Can continue allocating after ez_free");
+	assert_test(new_alloc != NULL, "Can continue allocating after ez_release");
 }
 
 /* Memory stress test */
