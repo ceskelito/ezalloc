@@ -4,13 +4,13 @@
 # include <stddef.h> // size_t definition
 
 /* Allocates size bytes of memory with malloc() and saves
-** the pointer in a static linked list, before returning it.
-** Returns NULL if malloc fails. */
+ * the pointer in a static linked list, before returning it.
+ * Returns NULL if malloc fails. */
 void	*ez_alloc(size_t size);
 
 /* Allocates size * count bytes of memory with malloc(), fills
-** everything with 0s and saves the pointer in a static linked list,
-** before returning it. Returns NULL if malloc fails.*/
+ * everything with 0s and saves the pointer in a static linked list,
+ * before returning it. Returns NULL if malloc fails.*/
 void	*ez_calloc(size_t size, size_t count);
 
 /* Add an already allocated address at the end of the garbage list.
