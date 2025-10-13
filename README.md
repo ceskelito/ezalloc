@@ -113,7 +113,7 @@ gcc test.c -L. -lezalloc -o test
 ./test
 ```
 
-## Example
+## Example (from the original repository)
 
 <img width="497" alt="Screen Shot 2023-02-04 at 2 14 54 PM" src="https://user-images.githubusercontent.com/95633668/216769739-afd10d33-86ff-4fad-8820-ba0f3e1110fe.png">
 
