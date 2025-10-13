@@ -19,36 +19,27 @@ static void     cleanup_groups_list(t_group **head, t_group **tail)
         free(prev->garbage);
         free(prev);
     }
+	*head = NULL;
+	*tail = NULL;
 }
 
-static void     delete_group(t_group **head, t_group **tail, char *target_name)
-{
-    t_group *curr;
-    t_group *prev;
-
-    if (!*head || !*tail)
-      return ;
-    curr = *head;
-    prev = NULL;
-
-    while (curr)
-    {
-      if (strcmp(curr->name, target_name) == 0)
-      {
-          if (curr == *tail)
-            *tail = prev;
-          if (curr == *head)
-            *head = curr->next;
-          else
-            prev->next = curr->next;
-          free(curr->name);
-          free(curr->garbage);
-          free(curr);
-          return;
-      }
-    prev = curr;
-		curr = curr->next;
-    }
+static void		delete_group(t_group **head, t_group **tail, t_group *group)
+{	
+	if (!group)
+		return ;
+	if (group == *head)
+		*head = group->next;
+	if (group == *tail)
+		*tail = group->prev;
+	if (group->prev)
+		group->prev->next = group->next;
+	if (group->next)
+		group->next->prev = group->prev;
+	free(group->name);
+    free(group->garbage);		
+    free(group);
+	group->next = NULL;
+	group->prev = NULL;
 }
 
 /* Returns a pointer to the name group */
@@ -73,25 +64,26 @@ static t_group *safe_new_group(t_group **head, t_group **tail, char *name)
     t_group *group;
 
     if (get_group(*head, name))
-      return (NULL);
+		return (NULL);
     group = malloc(sizeof(t_group));
     if (!group)
-      return (NULL);
+		return (NULL);
     group->name = strdup(name);
     group->garbage = NULL;
     group->next = NULL;
+    group->prev = NULL;
     if (!*head)
     {
-		  *head = group;
-		  *tail = *head;
+		*head = group;
+		*tail = *head;
     }
-	  else
-	  {
-	  	(*tail)->next = group;
-	  	*tail = (*tail)->next;
-	  }
+    else
+	{
+		(*tail)->next = group;
+		group->prev = *tail;
+		*tail = (*tail)->next;
+	}
 	return (group);
-
 }
 
 void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
@@ -100,22 +92,29 @@ void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
     static t_group	*groups_tail;
     t_group			    *group ;
 
-    if (mode == CLEANUP)
-    {
-        cleanup_groups_list(&groups_head, &groups_tail);
-        return (NULL);
-    } else if (!name)
+	if (mode == CLEANUP)
+	{
+	    while (groups_head)
+	    {
+	        group = groups_head->next;
+	        ezg_alloc_handler(NO_BYTES, DELETE_GROUP, NO_DATA, groups_head->name);
+	        groups_head = group;
+	    }
+	    groups_tail = NULL;
+	    return NULL;
+	}
+	else if (!name)
     {
       //set error
       return (NULL);
     }
     if (mode == CREATE_GROUP)
     {
-        //if (group)
-          // set error (group exist)
-        //else  
-          safe_new_group(&groups_head, &groups_tail, name);
-        return (NULL);
+		if (!safe_new_group(&groups_head, &groups_tail, name))
+		{
+		    // set error: failed to create group
+		}
+		return NULL;
     }
     else if (!(group = get_group(groups_head, name)))
     {
@@ -124,16 +123,16 @@ void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
     }
     if (mode == RELEASE_GROUP)
     {
-        allocation_handler(size, CLEANUP, NO_DATA, group);
+        allocation_handler(size, CLEANUP, NO_DATA, group->garbage);
     }
     else if (mode == DELETE_GROUP)
     {
-        allocation_handler(size, CLEANUP, NO_DATA, group);
-        delete_group(name);
+        allocation_handler(size, CLEANUP, NO_DATA, group->garbage);
+        delete_group(&groups_head, &groups_tail, group);
     }
     else
     {
-      return (allocation_handler(size, mode, target, group));
+      return (allocation_handler(size, mode, target, group->garbage));
     }
 }
 
