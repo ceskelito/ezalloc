@@ -1,4 +1,6 @@
 #include "ezalloc_internal.h"
+#include <errno.h>
+#include <stdio.h>
 
 static t_alloc	*new_node(void	*ptr)
 {
@@ -6,7 +8,10 @@ static t_alloc	*new_node(void	*ptr)
 
 	node = malloc(sizeof(t_alloc));
 	if (!node)
+	{
+		perror("ezalloc: malloc failed for node");
 		return (NULL);
+	}
 	node->data = ptr;
 	node->next = NULL;
 	return (node);
@@ -88,6 +93,11 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage
 	if (mode == NEW)
 	{
 		new_ptr = malloc(size);
+		if (!new_ptr)
+		{
+			perror("ezalloc: malloc failed");
+			return (NULL);
+		}
 		safe_new_node(garbage, new_ptr);
 		return (new_ptr);
 	}

@@ -1,5 +1,7 @@
 #include "ezalloc.h"
 #include "ezalloc_internal.h"
+#include <errno.h>
+#include <stdio.h>
 
 static void		delete_group(t_group **head, t_group **tail, t_group *group)
 {	
@@ -16,8 +18,6 @@ static void		delete_group(t_group **head, t_group **tail, t_group *group)
 	free(group->name);
     free(group->garbage);		
     free(group);
-	group->next = NULL;
-	group->prev = NULL;
 }
 
 /* Returns a pointer to the name group */
@@ -47,7 +47,22 @@ static t_group *safe_new_group(t_group **head, t_group **tail, char *name)
     if (!group)
 		return (NULL);
     group->name = strdup(name);
-    group->garbage = NULL;
+    if (!group->name)
+    {
+        free(group);
+        perror("ezalloc: strdup failed");
+        return (NULL);
+    }
+    group->garbage = malloc(sizeof(t_garbage));
+    if (!group->garbage)
+    {
+        free(group->name);
+        free(group);
+        perror("ezalloc: malloc failed for garbage structure");
+        return (NULL);
+    }
+    group->garbage->head = NULL;
+    group->garbage->tail = NULL;
     group->next = NULL;
     group->prev = NULL;
     if (!*head)
@@ -83,20 +98,20 @@ void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
 	}
 	else if (!name)
     {
-      //set error
+      perror("ezalloc: group name is NULL");
       return (NULL);
     }
     if (mode == CREATE_GROUP)
     {
 		if (!safe_new_group(&groups_head, &groups_tail, name))
 		{
-		    // set error: failed to create group
+		    perror("ezalloc: failed to create group");
 		}
 		return NULL;
     }
     else if (!(group = get_group(groups_head, name)))
     {
-        //set error
+        perror("ezalloc: group not found");
         return (NULL);
     }
     if (mode == RELEASE_GROUP)

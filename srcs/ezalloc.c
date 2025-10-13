@@ -1,6 +1,15 @@
 #include "ezalloc.h"
 #include "ezalloc_internal.h"
+#include <stdint.h>
+#include <string.h>
 
+
+static void	zero_memory(void *ptr, size_t total_size)
+{
+	if (!ptr)
+		return;
+	memset(ptr, 0, total_size);
+}
 
 static void	*ez_alloc_handler(size_t size, int mode, void *target)
 {	
@@ -15,19 +24,13 @@ void	*ez_alloc(size_t size)
 
 void	*ez_calloc(size_t size, size_t count)
 {
-	char	*new_ptr;
-	size_t	i;
+	void	*new_ptr;
 
-	new_ptr = ez_alloc_handler(size * count, NEW, NO_DATA);
-	if (!new_ptr)
+	if (count != 0 && size > SIZE_MAX / count)
 		return (NULL);
-	i = 0;
-	while (i < size * count)
-	{
-		new_ptr[i] = 0;
-		++i;
-	}
-	return ((void *)new_ptr);
+	new_ptr = ez_alloc_handler(size * count, NEW, NO_DATA);
+	zero_memory(new_ptr, size * count);
+	return (new_ptr);
 }
 
 void	*ez_add(void	*data)
