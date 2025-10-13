@@ -15,11 +15,11 @@ void	*ez_calloc(size_t size, size_t count);
 
 /* Add an already allocated address at the end of the garbage list.
  * Return the pointer we passed it. */
-void	*ez_add(void *ptr);
+void	*ez_add(void *data);
 
 /* Search for the pointer in the list, and frees the pointer and the node itself;
  * after removed the node from the list */
-void	ez_release(void	*ptr);
+void	ez_release(void	*data);
 
 /* Frees all the memory previously allocated by ezalloc and ezcalloc. */
 void	ez_cleanup(void);

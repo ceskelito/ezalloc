@@ -20,6 +20,8 @@ void	*ezg_calloc(char *group, size_t size, size_t count);
  * Return the pointer we passed it. */
 void	*ezg_add(char *tag, void *ptr);
 
+void    *ezeg_release(char *group, void *ptr);
+
 /* Create a new named gargabe list;
 ** if a group named ${tag} already exists fails.
 ** Return 0 on success, 1 on failure. */
@@ -31,9 +33,9 @@ int		ezg_create_group(char *tag);
 
 /* Frees all the memory previously allocated by ezg_alloc and ezg_calloc
 ** in the ${tag} named linked list and delete the list itself. */
-void	ezg_clean_group(char *group);
+void	ezg_release_group(char *group);
 
 /* Frees all the memory previously allocated by ezg_alloc and ezg_calloc. */
-void	ezg_clean(void);
+void	ezg_cleanup(void);
 
 #endif
