@@ -15,7 +15,8 @@ typedef enum e_action
 	RELEASE,
 	CLEANUP,
 	CREATE_GROUP,	// only for groups
-	RELEASE_GROUP	// only for groups
+	RELEASE_GROUP,	// only for groups
+	DELETE_GROUP	// only for groups
 } t_action;
 
 

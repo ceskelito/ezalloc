@@ -184,12 +184,12 @@ void test_ez_cleanup(void)
 		*ptr4 = 77;
 }
 
-/* Test ezg_create_group function */
+/* Test ezg_group_create function */
 void test_ezg_create_group(void)
 {
-	print_test_header("ezg_create_group()");
+	print_test_header("ezg_group_create()");
 	
-	printf("Note: ezg_create_group() is declared in header but not fully implemented\n");
+	printf("Note: ezg_group_create() is declared in header but not fully implemented\n");
 	printf("Note: Group functionality appears incomplete in current implementation\n");
 	assert_test(1, "Group creation - implementation pending");
 }

@@ -33,15 +33,20 @@ void	ezg_release(char *name, void *data)
 	ezg_alloc_handler(NO_BYTES, RELEASE, data, name);
 }
 
-int 	ezg_create_group(char *name)
+int 	ezg_group_create(char *name)
 {
 	ezg_alloc_handler(NO_BYTES, CREATE_GROUP, NO_DATA, name);
 	return 0;
 }
 
-void	ezg_release_group(char *name)
+void	ezg_group_release(char *name)
 {
 	ezg_alloc_handler(NO_BYTES, RELEASE_GROUP, NO_DATA, name);
+}
+
+void	ezg_group_delete(char *name)
+{
+	ezg_alloc_handler(NO_BYTES, DELETE_GROUP, NO_DATA, name);
 }
 
 void    ezg_cleanup(void)

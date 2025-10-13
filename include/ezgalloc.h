@@ -26,11 +26,11 @@ void    ezg_release(char *group, void *data);
 /* Create a new named gargabe list;
 ** if a group named ${group} already exists fails.
 ** Return 0 on success, 1 on failure. */
-int		ezg_create_group(char *group);
+int		ezg_group_create(char *group);
 
 /* Frees all the memory previously allocated by ezg_alloc and ezg_calloc
 ** in the ${group} named linked list and delete the list itself. */
-void	ezg_release_group(char *group);
+void	ezg_group_release(char *group);
 
 /* Frees all the memory previously allocated by ezg_alloc and ezg_calloc. */
 void	ezg_cleanup(void);
