@@ -23,16 +23,18 @@ void	*ezg_add(char *group, void *data);
 /* Search for the pointer in the "group" list, and frees the pointer*/
 void    ezg_release(char *group, void *data);
 
-/* Create a new named gargabe list;
-** if a group named ${group} already exists fails.
-** Return 0 on success, 1 on failure. */
+/* Create a new named garbage list.
+** If a group named ${group} already exists, fails.
+** Returns 0 on success. */
 int		ezg_group_create(char *group);
 
-/* Frees all the memory previously allocated by ezg_alloc and ezg_calloc
-** in the ${group} named linked list and delete the list itself. */
+/* Frees all the memory in the ${group} but keeps the group alive. */
 void	ezg_group_release(char *group);
 
-/* Frees all the memory previously allocated by ezg_alloc and ezg_calloc. */
+/* Deletes the group and frees all its memory. */
+void	ezg_group_delete(char *group);
+
+/* Frees all the memory previously allocated in all groups. */
 void	ezg_cleanup(void);
 
 #endif

@@ -1,6 +1,14 @@
 #include "ezalloc_internal.h"
 #include "ezgalloc.h"
 #include <stdint.h>
+#include <string.h>
+
+static void	zero_memory(void *ptr, size_t total_size)
+{
+	if (!ptr)
+		return;
+	memset(ptr, 0, total_size);
+}
 
 void    *ezg_alloc(char *name, size_t size)
 {
@@ -9,21 +17,13 @@ void    *ezg_alloc(char *name, size_t size)
 
 void	*ezg_calloc(char *name, size_t size, size_t count)
 {
-	char	*new_ptr;
-    size_t  i;
+	void	*new_ptr;
 
 	if (count != 0 && size > SIZE_MAX / count)
 		return (NULL);
 	new_ptr = ezg_alloc_handler(size * count, NEW, NO_DATA, name);
-	if (!new_ptr)
-		return (NULL);
-	i = 0;
-	while (i < size * count)
-	{
-		new_ptr[i] = 0;
-		++i;
-	}
-	return ((void *)new_ptr);
+	zero_memory(new_ptr, size * count);
+	return (new_ptr);
 }
 
 void    *ezg_add(char *name, void *data)

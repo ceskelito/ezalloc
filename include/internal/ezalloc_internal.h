@@ -60,7 +60,5 @@ typedef struct s_group
  */
 void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage);
 
-//		Wrapper of allocation handler
-//void	*ez_alloc_handler(size_t size, int mode, void *target);
 void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name);
 #endif
