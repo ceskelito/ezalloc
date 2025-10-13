@@ -5,5 +5,7 @@
 objs/
 .cache/
 .vscode/
+
 test
 valout*
+compile_flags.txt
