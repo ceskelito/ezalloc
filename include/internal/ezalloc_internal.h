@@ -5,7 +5,7 @@
 # include <string.h>	
 
 # define NO_BYTES	0
-# define NO_TARGET	NULL
+# define NO_DATA	NULL
 # define NO_GROUP	NULL
 
 typedef enum e_action

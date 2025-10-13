@@ -3,7 +3,7 @@
 
 void    *ezg_alloc(char *name, size_t size)
 {
-    return(ezg_alloc_handler(size, NEW, NO_TARGET, name));
+    return(ezg_alloc_handler(size, NEW, NO_DATA, name));
 }
 
 void	*ezg_calloc(char *name, size_t size, size_t count)
@@ -11,7 +11,7 @@ void	*ezg_calloc(char *name, size_t size, size_t count)
 	char	*new_ptr;
     size_t  i;
 
-	new_ptr = ezg_alloc_handler(size * count, NEW, NO_TARGET, name);
+	new_ptr = ezg_alloc_handler(size * count, NEW, NO_DATA, name);
 	if (!new_ptr)
 		return (NULL);
 	i = 0;
@@ -33,12 +33,18 @@ void	ezg_release(char *name, void *data)
 	ezg_alloc_handler(NO_BYTES, RELEASE, data, name);
 }
 
+int 	ezg_create_group(char *name)
+{
+	ezg_alloc_handler(NO_BYTES, CREATE_GROUP, NO_DATA, name);
+	return 0;
+}
+
 void	ezg_release_group(char *name)
 {
-	ezg_alloc_handler(NO_BYTES, RELEASE_GROUP, NO_TARGET, name);
+	ezg_alloc_handler(NO_BYTES, RELEASE_GROUP, NO_DATA, name);
 }
 
 void    ezg_cleanup(void)
 {
-    ezg_alloc_handler(NO_BYTES, CLEANUP, NO_TARGET, NO_GROUP);
+    ezg_alloc_handler(NO_BYTES, CLEANUP, NO_DATA, NO_GROUP);
 }

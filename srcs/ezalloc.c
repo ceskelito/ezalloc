@@ -10,7 +10,7 @@ static void	*ez_alloc_handler(size_t size, int mode, void *target)
 
 void	*ez_alloc(size_t size)
 {
-	return (ez_alloc_handler(size, NEW, NO_TARGET));
+	return (ez_alloc_handler(size, NEW, NO_DATA));
 }
 
 void	*ez_calloc(size_t size, size_t count)
@@ -18,7 +18,7 @@ void	*ez_calloc(size_t size, size_t count)
 	char	*new_ptr;
 	size_t	i;
 
-	new_ptr = ez_alloc_handler(size * count, NEW, NO_TARGET);
+	new_ptr = ez_alloc_handler(size * count, NEW, NO_DATA);
 	if (!new_ptr)
 		return (NULL);
 	i = 0;
@@ -43,5 +43,5 @@ void	ez_release(void *data)
 
 void	ez_cleanup(void) 
 {
-	ez_alloc_handler(NO_BYTES, CLEANUP, NO_TARGET);
+	ez_alloc_handler(NO_BYTES, CLEANUP, NO_DATA);
 }
