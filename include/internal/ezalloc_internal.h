@@ -40,6 +40,7 @@ typedef struct s_group
 	t_garbage		*garbage;
 	char            *name;
 	struct s_group  *next;
+	struct s_group	*prev;
 } t_group;
 
 /*
