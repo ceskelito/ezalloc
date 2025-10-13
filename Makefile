@@ -6,6 +6,7 @@ MKDIR	= mkdir -p
 
 CFLAGS	= -Wall -Wextra -Werror
 IFLAGS	= -Iinclude -Iinclude/internal
+VAL_FLAGS = --leak-check=full --track-origins=yes --show-leak-kinds=all
 SDIR 	= srcs
 ODIR 	= objs
 
@@ -34,7 +35,10 @@ $(TEST_BIN): $(NAME) $(TEST_SRC)
 	$(CC) $(CFLAGS) $(IFLAGS) $(TEST_SRC) -L. -lezalloc -o $(TEST_BIN)
 
 run-test: $(TEST_BIN)
-	./$(TEST_BIN)
+	valgrind $(VAL_FLAGS) ./$(TEST_BIN)
+
+run-test-file: $(TEST_BIN)
+	vlagrind $(VAL_FLAGS) ./$(TEST_BIN) 2>valout.py
 	
 clean:
 	$(RM) $(OBJS)

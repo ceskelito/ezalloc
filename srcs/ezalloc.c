@@ -41,7 +41,7 @@ void	ez_free(void *ptr)
 	ez_alloc_handler(NO_BYTES, RELEASE, ptr);
 }
 
-void	ez_cleanup(void)
+void	ez_cleanup(void) 
 {
 	ez_alloc_handler(NO_BYTES, CLEANUP, NO_TARGET);
 }

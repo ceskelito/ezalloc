@@ -356,7 +356,7 @@ int main(void)
 	// The bug is that clean_garbage_list doesn't reset head/tail pointers
 	// Commenting out to allow test to complete successfully
 	// Final cleanup
-	// ez_cleanup();
+	ez_cleanup();
 	// ezg_clean();
 	
 	printf("\n");
