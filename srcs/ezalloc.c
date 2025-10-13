@@ -1,5 +1,6 @@
 #include "ezalloc.h"
 #include "ezalloc_internal.h"
+#include <stdint.h>
 
 
 static void	*ez_alloc_handler(size_t size, int mode, void *target)
@@ -18,6 +19,8 @@ void	*ez_calloc(size_t size, size_t count)
 	char	*new_ptr;
 	size_t	i;
 
+	if (count != 0 && size > SIZE_MAX / count)
+		return (NULL);
 	new_ptr = ez_alloc_handler(size * count, NEW, NO_DATA);
 	if (!new_ptr)
 		return (NULL);

@@ -1,5 +1,6 @@
 #include "ezalloc_internal.h"
 #include "ezgalloc.h"
+#include <stdint.h>
 
 void    *ezg_alloc(char *name, size_t size)
 {
@@ -11,6 +12,8 @@ void	*ezg_calloc(char *name, size_t size, size_t count)
 	char	*new_ptr;
     size_t  i;
 
+	if (count != 0 && size > SIZE_MAX / count)
+		return (NULL);
 	new_ptr = ezg_alloc_handler(size * count, NEW, NO_DATA, name);
 	if (!new_ptr)
 		return (NULL);
