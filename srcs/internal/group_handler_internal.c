@@ -1,28 +1,6 @@
 #include "ezalloc.h"
 #include "ezalloc_internal.h"
 
-static void     cleanup_groups_list(t_group **head, t_group **tail)
-{
-    t_group *curr;
-    t_group *prev;
-
-    if (!*head || !*tail)
-      return;
-    curr = *head;
-    prev = NULL;
-    while (curr)
-    {
-        allocation_handler(NO_BYTES, CLEANUP, NO_DATA, curr->garbage);
-        prev = curr;
-		    curr = curr->next;
-        free(prev->name);
-        free(prev->garbage);
-        free(prev);
-    }
-	*head = NULL;
-	*tail = NULL;
-}
-
 static void		delete_group(t_group **head, t_group **tail, t_group *group)
 {	
 	if (!group)
@@ -134,5 +112,6 @@ void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
     {
       return (allocation_handler(size, mode, target, group->garbage));
     }
+    return (NULL);
 }
 

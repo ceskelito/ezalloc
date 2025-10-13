@@ -234,12 +234,12 @@ void test_ezg_clean_group(void)
 /* Test ezg_cleanup function */
 void test_ezg_cleanup(void)
 {
-	print_test_header("ezg_clean()");
+	print_test_header("ezg_cleanup()");
 	
 	printf("Note: Group cleanup when no groups exist\n");
 	
 	// Clean all groups - using the function from the header
-	ezg_clean();
+	ezg_cleanup();
 	assert_test(1, "ezg_clean executes without crashing when no groups");
 }
 
@@ -357,7 +357,7 @@ int main(void)
 	// Commenting out to allow test to complete successfully
 	// Final cleanup
 	ez_cleanup();
-	// ezg_clean();
+	// ezg_cleanup();
 	
 	printf("\n");
 	printf("╔════════════════════════════════════════════════════════════╗\n");
