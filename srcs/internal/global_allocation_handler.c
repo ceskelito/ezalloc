@@ -2,6 +2,7 @@
 #include <errno.h>
 #include <stdio.h>
 
+/* Creates a new node for the garbage collector list */
 static t_alloc	*new_node(void	*ptr)
 {
 	t_alloc	*node;
@@ -9,6 +10,7 @@ static t_alloc	*new_node(void	*ptr)
 	node = malloc(sizeof(t_alloc));
 	if (!node)
 	{
+		errno = ENOMEM;
 		set_error("ezalloc: malloc failed for node");
 		return (NULL);
 	}
@@ -17,6 +19,7 @@ static t_alloc	*new_node(void	*ptr)
 	return (node);
 }
 
+/* Safely creates a new node and adds it to the garbage collector list */
 static void	*safe_new_node(t_garbage *garbage, void *ptr)
 {
 	t_alloc *node;
@@ -39,6 +42,7 @@ static void	*safe_new_node(t_garbage *garbage, void *ptr)
 	return (node->data);
 }
 
+/* Frees all nodes in the garbage collector list */
 static void	cleanup_list(t_garbage *garbage)
 {
     t_alloc	*curr;
@@ -58,6 +62,7 @@ static void	cleanup_list(t_garbage *garbage)
     garbage->tail = NULL;
 }
 
+/* Removes and frees a specific node from the garbage collector list */
 static void	release_node(t_garbage *garbage, void *target_data)
 {
 	t_alloc	*curr;
@@ -97,12 +102,14 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage
 		new_ptr = malloc(size);
 		if (!new_ptr)
 		{
+			errno = ENOMEM;
 			set_error("ezalloc: malloc failed");
 			return (NULL);
 		}
 		//return (safe_new_node(garbage, new_ptr)) ? (new_ptr) : (free(new_ptr), NULL);
 		if (!safe_new_node(garbage, new_ptr))
 		{
+			errno = ENOMEM;
 			set_error("ezalloc: failed to create new node");
     		free(new_ptr);
  			return NULL;
@@ -112,7 +119,12 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage
 	else if (mode == ADD)
 	{
 		new_ptr = safe_new_node(garbage, target);
-		return (new_ptr) ? (new_ptr) : (set_error("ezalloc: failed to create new node"), NULL);
+		if (!new_ptr)
+		{
+			errno = ENOMEM;
+			set_error("ezalloc: failed to create new node");
+		}
+		return (new_ptr);
 	}
 	else if (mode == CLEANUP)
 	{	

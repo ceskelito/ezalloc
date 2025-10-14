@@ -62,28 +62,63 @@ typedef struct s_group_context
  * keeping track of every allocated pointer for automatic cleanup.
  *
  * @size:    Number of bytes to allocate (used only in NEW mode).
- * @mode:    Operation to perform (e.g. NEW, ADD, CLEANUP, RELEASE).
+ * @mode:    Operation to perform (NEW, ADD, CLEANUP, or RELEASE).
  * @target:  Pointer to add or release, depending on mode.
- *           Must be NULL for allocation or cleanup operations.
- * @garbage: Garbage collector context. Can't be NULL.
+ *           Must be NULL for NEW and CLEANUP operations.
+ * @garbage: Garbage collector context. Must not be NULL.
  *
- * Return:  Pointer to the allocated memory, or NULL if allocation fails
- *          or if the operation does not produce a new allocation.
+ * Return: Pointer to the allocated memory for NEW and ADD modes,
+ *         or NULL if allocation fails or for CLEANUP/RELEASE modes.
+ *         Sets errno to ENOMEM on allocation failures.
  */
 void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage);
 
 /*
- * ezg_alloc_handler - Groups complexity handler
+ * ezg_alloc_handler - Groups allocation handler
  *
- * This function will keep track of all the groups created,
- * and will distribute operations to be performed on groups.
- * It will rely on the global allocation handler for operations
- * involving the memory of a single group.
+ * This function manages all group-based operations. It keeps track of
+ * all groups created and distributes operations to be performed on them.
+ * Relies on allocation_handler for operations involving memory within
+ * a single group.
+ *
+ * @size:   Number of bytes to allocate (used only in NEW mode).
+ * @mode:   Operation to perform (NEW, ADD, CLEANUP, RELEASE, CREATE_GROUP,
+ *          RELEASE_GROUP, or DELETE_GROUP).
+ * @target: Pointer to add or release, depending on mode.
+ * @name:   Name of the group to operate on. Must not be NULL except
+ *          for CLEANUP mode.
+ *
+ * Return: Pointer to allocated memory or created group for NEW/ADD/CREATE_GROUP,
+ *         or NULL for other modes or on failure.
+ *         Sets errno to ENOMEM on allocation failures, EINVAL for invalid
+ *         arguments or missing groups, and EEXIST when trying to create
+ *         a group that already exists.
  */
 void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name);
 
 /**** Error Message Handling ****/
+
+/*
+ * set_error - Sets the last error message
+ *
+ * @str: Error message string to store
+ *
+ * Stores a copy of the error message for later retrieval.
+ * Sets errno to ENOMEM if strdup fails.
+ */
 void	set_error(char	*str);
+
+/*
+ * get_error - Retrieves the last error message
+ *
+ * Return: The last error message string, or NULL if no error
+ */
 char	*get_error(void);
+
+/*
+ * free_error - Frees the stored error message
+ *
+ * Cleans up the error message storage.
+ */
 void	free_error(void);
 #endif

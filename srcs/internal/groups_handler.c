@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <stdio.h>
 
+/* Removes a group from the linked list and frees its resources */
 static void		delete_group(t_group **head, t_group **tail, t_group *group)
 {	
 	if (!group)
@@ -20,6 +21,7 @@ static void		delete_group(t_group **head, t_group **tail, t_group *group)
     free(group);
 }
 
+/* Searches for a group by name in the linked list */
 /* Returns a pointer to the name group */
 static t_group	*get_group(t_group *head, char *name)
 {
@@ -37,6 +39,7 @@ static t_group	*get_group(t_group *head, char *name)
   return (NULL);
 }
 
+/* Creates a new group and adds it to the linked list */
 static t_group *safe_new_group(t_group **head, t_group **tail, char *name)
 {
     t_group *group;
@@ -45,16 +48,21 @@ static t_group *safe_new_group(t_group **head, t_group **tail, char *name)
     	  return (NULL);
     group = calloc(1, sizeof(t_group));
     if (!group)
+    {
+		    errno = ENOMEM;
 		    return (NULL);
+    }
     group->name = strdup(name);
     if (!group->name)
     {
+        errno = ENOMEM;
         free(group);
         return (NULL);
     }
     group->garbage = calloc(1, sizeof(t_garbage));
     if (!group->garbage)
     {
+        errno = ENOMEM;
         free(group->name);
         free(group);
         return (NULL);
@@ -82,17 +90,31 @@ void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
         return (NULL);
     }
     if (!name)
+    {
+        errno = EINVAL;
         return (set_error("ezalloc: group name is NULL"), NULL);
+    }
     group = get_group(groups.head, name);
     if (mode == CREATE_GROUP)
     {
         if (group)
+        {
+            errno = EEXIST;
             return (set_error("ezalloc: group already exists"), NULL);
+        }
         group = safe_new_group(&groups.head, &groups.tail, name);
-        return (group) ? (group) : (set_error("ezalloc: failed to create group"), NULL);
+        if (!group)
+        {
+            errno = ENOMEM;
+            return (set_error("ezalloc: failed to create group"), NULL);
+        }
+        return (group);
     }
     if (!group)
+    {
+        errno = EINVAL;
         return (set_error("ezalloc: group not found"), NULL);
+    }
     if (mode == RELEASE_GROUP || mode == DELETE_GROUP)
     {
         allocation_handler(size, CLEANUP, NO_DATA, group->garbage);
