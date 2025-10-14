@@ -1,13 +1,14 @@
 # ezalloc
 
-A basic C garbage collector system. Call `ez_alloc()`/`ez_calloc()` instead of `malloc()`/`calloc()` to allocate memory. Then, forget about your pointers and just call `ez_cleanup()` at the end of your program to free everything. No leaks, no stress. Have a nice day!
+A simple and complete C garbage collector, with a group-based allocation system (but also not!).
+Call `ez_alloc()`/`ez_calloc()` instead of `malloc()`/`calloc()` to allocate memory. Then, forget about your pointers and just call `ez_cleanup()` at the end of your program to free everything. No leaks, no stress. Have a nice day!
 
 ## Features
-
+- **42 École Norm-compliant branch (in development)**
 - **Simple API**: Drop-in replacement for malloc/calloc
 - **Automatic cleanup**: One function call frees all tracked memory
 - **Group support**: Organize allocations into named groups for selective cleanup
-- **Error handling**: Proper error reporting with set_error
+- **Error handling**: Proper error reporting with set_error and errno
 - **Safe**: Integer overflow protection in calloc operations
 
 ## Basic Usage (ez_* functions)
@@ -78,6 +79,7 @@ int main(void)
 - `void *ez_add(void *ptr)` - Track existing pointer
 - `void ez_release(void *ptr)` - Free specific pointer
 - `void ez_cleanup(void)` - Free all tracked memory
+- `char *ez_get_error(void)` - Returns a string describing the last error encountered.
 
 ### Group Functions (ezgalloc.h)
 
@@ -89,6 +91,7 @@ int main(void)
 - `void ezg_group_release(char *group)` - Free all memory in group
 - `void ezg_group_delete(char *group)` - Delete group and free its memory
 - `void ezg_cleanup(void)` - Free all groups
+- `char *ezg_get_error(void)` - Returns a string describing the last error encountered.
 
 ## Building
 
@@ -109,9 +112,12 @@ gcc your_program.c -L. -lezalloc -o your_program
 Run the included test suite:
 
 ```bash
-gcc test.c -L. -lezalloc -o test
-./test
+make run-test
 ```
+## Notice:
+
+- You must include only one of the two API headers
+- The library is not thread-safe
 
 ## Example (from the original repository)
 
