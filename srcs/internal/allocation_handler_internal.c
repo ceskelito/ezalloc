@@ -17,15 +17,15 @@ static t_alloc	*new_node(void	*ptr)
 	return (node);
 }
 
-static void	safe_new_node(t_garbage *garbage, void *ptr)
+static void	*safe_new_node(t_garbage *garbage, void *ptr)
 {
 	t_alloc *node;
 
 	if (!garbage || !ptr)
-		return ;
+		return (NULL);
 	node = new_node(ptr);
 	if (!node)
-		return ;
+		return (NULL);
 	if (!garbage->head)
 	{
 		garbage->head = node;
@@ -36,21 +36,23 @@ static void	safe_new_node(t_garbage *garbage, void *ptr)
 		garbage->tail->next = node;
 		garbage->tail = node;
 	}
+	return (node->data);
 }
 
 static void	cleanup_list(t_garbage *garbage)
 {
-    t_alloc	*tmp;
+    t_alloc	*curr;
+	t_alloc	*next;
 
     if (!garbage)
         return ;
-    tmp = garbage->head;
-    while (tmp)
+    curr = garbage->head;
+    while (curr)
     {
-        garbage->head = tmp->next;
-        free(tmp->data);
-        free(tmp);
-        tmp = garbage->head;
+        next = curr->next;
+        free(curr->data);
+        free(curr);
+        curr = next;
     }
     garbage->head = NULL;
     garbage->tail = NULL;
@@ -95,16 +97,22 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage
 		new_ptr = malloc(size);
 		if (!new_ptr)
 		{
-			perror("ezalloc: malloc failed");
-			return (NULL);
+			perror("ezalloc: malloc failed")
+			return (, NULL);
 		}
-		safe_new_node(garbage, new_ptr);
+		//return (safe_new_node(garbage, new_ptr)) ? (new_ptr) : (free(new_ptr), NULL);
+		if (!safe_new_node(garbage, new_ptr))
+		{
+			perror("ezalloc: failed to create new node");
+    		free(new_ptr);
+ 			return NULL;
+		}
 		return (new_ptr);
 	}
 	else if (mode == ADD)
 	{
-		safe_new_node(garbage, target);
-		return (target);
+		new_ptr = safe_new_node(garbage, target);
+		return (new_ptr) ? (new_ptr) : (perror("ezalloc: failed to create new node"), NULL);
 	}
 	else if (mode == CLEANUP)
 	{	
