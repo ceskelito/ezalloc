@@ -1,16 +1,16 @@
 #include "ezalloc.h"
 #include "ezalloc_internal.h"
 
-char	*ez_get_error(void)
-{
-	return (get_error());
-}
-
 /* Wrapper for allocation_handler with static garbage collector */
 static void	*ez_alloc_handler(size_t size, int mode, void *target)
 {	
 	static t_garbage	garbage;
 	return (allocation_handler(size, mode, target, &garbage));
+}
+
+char	*ez_get_error(void)
+{
+	return (get_error());
 }
 
 void	*ez_alloc(size_t size)

@@ -21,8 +21,8 @@ static void		delete_group(t_group **head, t_group **tail, t_group *group)
     free(group);
 }
 
-/* Searches for a group by name in the linked list */
-/* Returns a pointer to the name group */
+/* Searches for a group by name in the linked list.
+ * Returns a pointer to the name group */
 static t_group	*get_group(t_group *head, char *name)
 {
   t_group *curr;
@@ -77,10 +77,11 @@ static t_group *safe_new_group(t_group **head, t_group **tail, char *name)
 	  return (group);
 }
 
+/* You can find an exhaustive description in ezalloc_internal.h*/
 void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
 {
     static t_group_context  groups;
-    t_group			            *group ;
+    t_group			        *group ;
 
     if (mode == CLEANUP)
     {
