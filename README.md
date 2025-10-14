@@ -8,7 +8,7 @@ Call `ez_alloc()`/`ez_calloc()` instead of `malloc()`/`calloc()` to allocate mem
 - **Simple API**: Drop-in replacement for malloc/calloc
 - **Automatic cleanup**: One function call frees all tracked memory
 - **Group support**: Organize allocations into named groups for selective cleanup
-- **Error handling**: Proper error reporting with set_error
+- **Error handling**: Proper error reporting with set_error and errno
 - **Safe**: Integer overflow protection in calloc operations
 
 ## Basic Usage (ez_* functions)
