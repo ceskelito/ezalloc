@@ -35,8 +35,7 @@ void	*ez_calloc(size_t size, size_t count)
 
 void	*ez_add(void	*data)
 {
-	ez_alloc_handler(NO_BYTES, ADD, data);
-	return (data);
+	return (ez_alloc_handler(NO_BYTES, ADD, data));
 }
 
 void	ez_release(void *data)
