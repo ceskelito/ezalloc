@@ -98,16 +98,13 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage
  */
 void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name);
 
-/* Zeroes out the allocated memory */
-void	zero_memory(void *ptr, size_t total_size);
-
 /*
  * set_error - Sets the last error message
  *
  * @str: Error message string to store
  *
  * Stores a copy of the error message for later retrieval.
- * Sets errno to ENOMEM if strdup fails.
+ * Sets errno to ENOMEM if internal_strdup fails.
  */
 void	set_error(char	*str);
 
@@ -124,4 +121,11 @@ char	*get_error(void);
  * Cleans up the error message storage.
  */
 void	free_error(void);
+
+/* Libraries Helper Functions*/
+char	*internal_strdup(char *s);
+int		internal_strcmp(char *s1, char *s2);
+void	*internal_calloc(size_t nmemb, size_t size);
+void	internal_bzero(void *s, size_t n);
+
 #endif

@@ -28,7 +28,7 @@ void	*ez_calloc(size_t size, size_t count)
 		return (NULL);
 	}
 	new_ptr = ez_alloc_handler(size * count, NEW, NO_DATA);
-	zero_memory(new_ptr, size * count);
+	internal_bzero(new_ptr, size * count);
 	return (new_ptr);
 }
 

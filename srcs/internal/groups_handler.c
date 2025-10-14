@@ -32,7 +32,7 @@ static t_group	*get_group(t_group *head, char *name)
   curr = head;
   while(curr)
   {
-    if (strcmp(curr->name, name) == 0)
+    if (internal_strcmp(curr->name, name) == 0)
       return (curr);
     curr = curr->next;
   }
@@ -46,20 +46,20 @@ static t_group *safe_new_group(t_group **head, t_group **tail, char *name)
 
     if (get_group(*head, name))
     	  return (NULL);
-    group = calloc(1, sizeof(t_group));
+    group = internal_calloc(1, sizeof(t_group));
     if (!group)
     {
 		    errno = ENOMEM;
 		    return (NULL);
     }
-    group->name = strdup(name);
+    group->name = internal_strdup(name);
     if (!group->name)
     {
         errno = ENOMEM;
         free(group);
         return (NULL);
     }
-    group->garbage = calloc(1, sizeof(t_garbage));
+    group->garbage = internal_calloc(1, sizeof(t_garbage));
     if (!group->garbage)
     {
         errno = ENOMEM;

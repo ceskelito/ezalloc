@@ -1,19 +1,7 @@
 #include "ezalloc_internal.h"
 
-/* Zeroes out the allocated memory */
-void	zero_memory(void *ptr, size_t total_size)
-{
-	if (!ptr)
-		return;
-	memset(ptr, 0, total_size);
-}
-
-/* 
-    Error Messages Handling
-*/
-
 /* Manages the last error message (set, get, or clean) */
-static char *error_handler(int action, const char *str)
+static char *error_handler(int action, char *str)
 {
     static char *last_error;
 
@@ -23,7 +11,7 @@ static char *error_handler(int action, const char *str)
         last_error = NULL;
         if (!str)
             return (NULL);
-        last_error = strdup(str);
+        last_error = internal_strdup(str);
         if (!last_error)
             errno = ENOMEM;
     }

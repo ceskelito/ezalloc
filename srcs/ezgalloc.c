@@ -21,7 +21,7 @@ void	*ezg_calloc(char *name, size_t size, size_t count)
 		return (NULL);
 	}
 	new_ptr = ezg_alloc_handler(size * count, NEW, NO_DATA, name);
-	zero_memory(new_ptr, size * count);
+	internal_bzero(new_ptr, size * count);
 	return (new_ptr);
 }
 

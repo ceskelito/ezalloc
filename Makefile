@@ -14,7 +14,9 @@ FILES	= 	ezalloc \
 			ezgalloc \
 			global_allocation_handler \
 			groups_handler \
-			utils
+			utils \
+			strings \
+			memory
 
 SRCS	= $(addsuffix .c, $(FILES))
 OBJS	= $(addprefix $(ODIR)/,$(addsuffix .o, $(FILES)))
