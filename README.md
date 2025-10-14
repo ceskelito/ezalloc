@@ -1,6 +1,7 @@
 # ezalloc
 
-A simple and complete C garbage collector, with a group-based allocation system (but also not!). Call `ez_alloc()`/`ez_calloc()` instead of `malloc()`/`calloc()` to allocate memory. Then, forget about your pointers and just call `ez_cleanup()` at the end of your program to free everything. No leaks, no stress. Have a nice day!
+A simple and complete C garbage collector, with a group-based allocation system (but also not!).
+Call `ez_alloc()`/`ez_calloc()` instead of `malloc()`/`calloc()` to allocate memory. Then, forget about your pointers and just call `ez_cleanup()` at the end of your program to free everything. No leaks, no stress. Have a nice day!
 
 ## Features
 
