@@ -13,13 +13,13 @@ ODIR 	= objs
 FILES	= 	ezalloc \
 			ezgalloc \
 			global_allocation_handler \
-			groups_handler
+			groups_handler \
 			utils
 
 SRCS	= $(addsuffix .c, $(FILES))
 OBJS	= $(addprefix $(ODIR)/,$(addsuffix .o, $(FILES)))
 
-TEST_BIN	= test
+TEST_BIN = test
 TEST_SRC = test.c
 
 vpath %.c $(SDIR):$(SDIR)/internal

@@ -97,8 +97,8 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage
 		new_ptr = malloc(size);
 		if (!new_ptr)
 		{
-			set_error("ezalloc: malloc failed")
-			return (, NULL);
+			set_error("ezalloc: malloc failed");
+			return (NULL);
 		}
 		//return (safe_new_node(garbage, new_ptr)) ? (new_ptr) : (free(new_ptr), NULL);
 		if (!safe_new_node(garbage, new_ptr))

@@ -11,7 +11,7 @@ static void	zero_memory(void *ptr, size_t total_size)
 	memset(ptr, 0, total_size);
 }
 
-void	ez_get_error(void)
+char	*ez_get_error(void)
 {
 	return (get_error());
 }

@@ -2,20 +2,24 @@
 
 static char *error_handler(int action, const char *str)
 {
-    static char *last_error = NULL;
+    static char *last_error;
 
     if (action == SET)
     {
         free(last_error);
+        last_error = NULL;
         if (!str)
-            break ;
+            return (NULL);
         last_error = strdup(str);
     }
     else if (action == GET)
-        return last_error;
+        return (last_error);
     else if (action == CLEAN)
+    {
         free (last_error);
-    return NULL;
+        last_error = NULL;
+    }
+    return (NULL);
 }
 
 void    set_error(char *str)
