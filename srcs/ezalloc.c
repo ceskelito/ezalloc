@@ -11,6 +11,11 @@ static void	zero_memory(void *ptr, size_t total_size)
 	memset(ptr, 0, total_size);
 }
 
+void	ez_get_error(void)
+{
+	return (get_error());
+}
+
 static void	*ez_alloc_handler(size_t size, int mode, void *target)
 {	
 	static t_garbage	garbage;
@@ -45,5 +50,6 @@ void	ez_release(void *data)
 
 void	ez_cleanup(void) 
 {
+	free_error();
 	ez_alloc_handler(NO_BYTES, CLEANUP, NO_DATA);
 }

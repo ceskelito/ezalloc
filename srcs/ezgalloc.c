@@ -10,6 +10,11 @@ static void	zero_memory(void *ptr, size_t total_size)
 	memset(ptr, 0, total_size);
 }
 
+void	ezg_get_error(void)
+{
+	return (get_error());
+}
+
 void    *ezg_alloc(char *name, size_t size)
 {
     return(ezg_alloc_handler(size, NEW, NO_DATA, name));
@@ -55,5 +60,6 @@ void	ezg_group_delete(char *name)
 
 void    ezg_cleanup(void)
 {
+	free_error();
     ezg_alloc_handler(NO_BYTES, CLEANUP, NO_DATA, NO_GROUP);
 }

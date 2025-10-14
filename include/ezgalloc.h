@@ -3,6 +3,9 @@
 
 # include <stddef.h>
 
+/* Return the last error encountered in the perror format */
+char    *ezg_get_error(void);
+
 /* Allocates size bytes of memory with malloc() and saves
  * the pointer in a static linked list named ${group}, before returning it.
  * Every list will be managed separatly from the others.

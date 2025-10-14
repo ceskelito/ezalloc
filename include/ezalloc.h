@@ -3,6 +3,9 @@
 
 # include <stddef.h> // size_t definition
 
+/* Return the last error encountered in the perror format */
+char    *ez_get_error(void);
+
 /* Allocates size bytes of memory with malloc() and saves
  * the pointer in a static linked list, before returning it.
  * Returns NULL if malloc fails. */

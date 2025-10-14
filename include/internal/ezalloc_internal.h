@@ -19,6 +19,12 @@ typedef enum e_action
 	DELETE_GROUP	// only for groups
 } t_action;
 
+typedef enum e_err_action
+{
+	GET,
+	SET,
+	CLEAN
+} t_err_action;
 
 /* garbage collector node */
 typedef struct s_alloc
@@ -66,5 +72,18 @@ typedef struct s_group_context
  */
 void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage);
 
+/*
+ * ezg_alloc_handler - Groups complexity handler
+ *
+ * This function will keep track of all the groups created,
+ * and will distribute operations to be performed on groups.
+ * It will rely on the global allocation handler for operations
+ * involving the memory of a single group.
+ */
 void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name);
+
+/**** Error Message Handling ****/
+void	set_error(char	*str);
+char	*get_error(void);
+void	free_error(void);
 #endif

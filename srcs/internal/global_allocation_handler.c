@@ -9,7 +9,7 @@ static t_alloc	*new_node(void	*ptr)
 	node = malloc(sizeof(t_alloc));
 	if (!node)
 	{
-		perror("ezalloc: malloc failed for node");
+		set_error("ezalloc: malloc failed for node");
 		return (NULL);
 	}
 	node->data = ptr;
@@ -97,13 +97,13 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage
 		new_ptr = malloc(size);
 		if (!new_ptr)
 		{
-			perror("ezalloc: malloc failed")
+			set_error("ezalloc: malloc failed")
 			return (, NULL);
 		}
 		//return (safe_new_node(garbage, new_ptr)) ? (new_ptr) : (free(new_ptr), NULL);
 		if (!safe_new_node(garbage, new_ptr))
 		{
-			perror("ezalloc: failed to create new node");
+			set_error("ezalloc: failed to create new node");
     		free(new_ptr);
  			return NULL;
 		}
@@ -112,7 +112,7 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage
 	else if (mode == ADD)
 	{
 		new_ptr = safe_new_node(garbage, target);
-		return (new_ptr) ? (new_ptr) : (perror("ezalloc: failed to create new node"), NULL);
+		return (new_ptr) ? (new_ptr) : (set_error("ezalloc: failed to create new node"), NULL);
 	}
 	else if (mode == CLEANUP)
 	{	

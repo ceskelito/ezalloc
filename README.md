@@ -7,7 +7,7 @@ A basic C garbage collector system. Call `ez_alloc()`/`ez_calloc()` instead of `
 - **Simple API**: Drop-in replacement for malloc/calloc
 - **Automatic cleanup**: One function call frees all tracked memory
 - **Group support**: Organize allocations into named groups for selective cleanup
-- **Error handling**: Proper error reporting with perror
+- **Error handling**: Proper error reporting with set_error
 - **Safe**: Integer overflow protection in calloc operations
 
 ## Basic Usage (ez_* functions)

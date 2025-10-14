@@ -15,9 +15,9 @@ static void		delete_group(t_group **head, t_group **tail, t_group *group)
 		group->prev->next = group->next;
 	if (group->next)
 		group->next->prev = group->prev;
-	free(group->name);
-  free(group->garbage);		
-  free(group);
+    free(group->name);
+    free(group->garbage);		
+    free(group);
 }
 
 /* Returns a pointer to the name group */
@@ -82,17 +82,17 @@ void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
         return (NULL);
     }
     if (!name)
-        return (perror("ezalloc: group name is NULL"), NULL);
+        return (set_error("ezalloc: group name is NULL"), NULL);
     group = get_group(groups.head, name);
     if (mode == CREATE_GROUP)
     {
         if (group)
-            return (perror("ezalloc: group already exists"), NULL);
+            return (set_error("ezalloc: group already exists"), NULL);
         group = safe_new_group(&groups.head, &groups.tail, name);
-        return (group) ? (group) : (perror("ezalloc: failed to create group"), NULL);
+        return (group) ? (group) : (set_error("ezalloc: failed to create group"), NULL);
     }
     if (!group)
-        return (perror("ezalloc: group not found"), NULL);
+        return (set_error("ezalloc: group not found"), NULL);
     if (mode == RELEASE_GROUP || mode == DELETE_GROUP)
     {
         allocation_handler(size, CLEANUP, NO_DATA, group->garbage);
