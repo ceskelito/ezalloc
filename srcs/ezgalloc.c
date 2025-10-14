@@ -38,8 +38,9 @@ void	ezg_release(char *name, void *data)
 
 int 	ezg_group_create(char *name)
 {
-	ezg_alloc_handler(NO_BYTES, CREATE_GROUP, NO_DATA, name);
-	return 0;
+	if (!ezg_alloc_handler(NO_BYTES, CREATE_GROUP, NO_DATA, name))
+		return (1);
+	return (0);
 }
 
 void	ezg_group_release(char *name)

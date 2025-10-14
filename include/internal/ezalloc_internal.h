@@ -43,6 +43,12 @@ typedef struct s_group
 	struct s_group	*prev;
 } t_group;
 
+typedef struct s_group_context
+{
+	t_group	*head;
+	t_group	*tail;
+} t_group_context;
+
 /*
  * allocation_handler - Global allocation handler
  *
