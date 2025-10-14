@@ -79,6 +79,7 @@ int main(void)
 - `void *ez_add(void *ptr)` - Track existing pointer
 - `void ez_release(void *ptr)` - Free specific pointer
 - `void ez_cleanup(void)` - Free all tracked memory
+- `char *ez_get_error(void)` - Returns a string describing the last error encountered.
 
 ### Group Functions (ezgalloc.h)
 
@@ -90,6 +91,7 @@ int main(void)
 - `void ezg_group_release(char *group)` - Free all memory in group
 - `void ezg_group_delete(char *group)` - Delete group and free its memory
 - `void ezg_cleanup(void)` - Free all groups
+- `char *ezg_get_error(void)` - Returns a string describing the last error encountered.
 
 ## Building
 
@@ -110,13 +112,12 @@ gcc your_program.c -L. -lezalloc -o your_program
 Run the included test suite:
 
 ```bash
-gcc test.c -L. -lezalloc -o test
-./test
+make run-test
 ```
 ## Notice:
 
 - You must include only one of the two API headers
-- Currently the library is not thread-safe
+- The library is not thread-safe
 
 ## Example (from the original repository)
 
