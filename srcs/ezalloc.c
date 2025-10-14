@@ -3,8 +3,9 @@
 
 /* Wrapper for allocation_handler with static garbage collector */
 static void	*ez_alloc_handler(size_t size, int mode, void *target)
-{	
+{
 	static t_garbage	garbage;
+
 	return (allocation_handler(size, mode, target, &garbage));
 }
 
@@ -32,7 +33,7 @@ void	*ez_calloc(size_t size, size_t count)
 	return (new_ptr);
 }
 
-void	*ez_add(void	*data)
+void	*ez_add(void *data)
 {
 	return (ez_alloc_handler(NO_BYTES, ADD, data));
 }
@@ -42,7 +43,7 @@ void	ez_release(void *data)
 	ez_alloc_handler(NO_BYTES, RELEASE, data);
 }
 
-void	ez_cleanup(void) 
+void	ez_cleanup(void)
 {
 	free_error();
 	ez_alloc_handler(NO_BYTES, CLEANUP, NO_DATA);

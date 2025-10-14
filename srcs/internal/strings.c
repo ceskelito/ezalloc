@@ -43,7 +43,6 @@ char	*internal_strdup(char *s)
 	return (str);
 }
 
-
 int	internal_strcmp(char *s1, char *s2)
 {
 	int	i;

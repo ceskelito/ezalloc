@@ -1,9 +1,8 @@
 #include "ezalloc_internal.h"
-
 #include <stdio.h>
 
 /* Creates a new node for the garbage collector list */
-static t_alloc	*new_node(void	*ptr)
+static t_alloc	*new_node(void *ptr)
 {
 	t_alloc	*node;
 
@@ -22,7 +21,7 @@ static t_alloc	*new_node(void	*ptr)
 /* Safely creates a new node and adds it to the garbage collector list */
 static void	*safe_new_node(t_garbage *garbage, void *ptr)
 {
-	t_alloc *node;
+	t_alloc	*node;
 
 	if (!garbage || !ptr)
 		return (NULL);
@@ -45,21 +44,21 @@ static void	*safe_new_node(t_garbage *garbage, void *ptr)
 /* Frees all nodes in the garbage collector list */
 static void	cleanup_list(t_garbage *garbage)
 {
-    t_alloc	*curr;
+	t_alloc	*curr;
 	t_alloc	*next;
 
-    if (!garbage)
-        return ;
-    curr = garbage->head;
-    while (curr)
-    {
-        next = curr->next;
-        free(curr->data);
-        free(curr);
-        curr = next;
-    }
-    garbage->head = NULL;
-    garbage->tail = NULL;
+	if (!garbage)
+		return ;
+	curr = garbage->head;
+	while (curr)
+	{
+		next = curr->next;
+		free(curr->data);
+		free(curr);
+		curr = next;
+	}
+	garbage->head = NULL;
+	garbage->tail = NULL;
 }
 
 /* Removes and frees a specific node from the garbage collector list */
@@ -91,7 +90,8 @@ static void	release_node(t_garbage *garbage, void *target_data)
 	}
 }
 
-void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage)
+void	*allocation_handler(size_t size, int mode, void *target,
+		t_garbage *garbage)
 {
 	void	*new_ptr;
 
@@ -110,8 +110,8 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage
 		{
 			errno = ENOMEM;
 			set_error("ezalloc: failed to create new node");
-    		free(new_ptr);
- 			return NULL;
+			free(new_ptr);
+			return (NULL);
 		}
 		return (new_ptr);
 	}
@@ -126,11 +126,11 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage
 		return (new_ptr);
 	}
 	else if (mode == CLEANUP)
-	{	
+	{
 		cleanup_list(garbage);
 	}
 	else if (mode == RELEASE)
-	{		
+	{
 		release_node(garbage, target);
 	}
 	return (NULL);
