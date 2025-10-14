@@ -1,6 +1,6 @@
 #include "ezalloc.h"
 #include "ezalloc_internal.h"
-#include <errno.h>
+
 #include <stdio.h>
 
 /* Removes a group from the linked list and frees its resources */

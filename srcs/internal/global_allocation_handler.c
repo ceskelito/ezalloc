@@ -1,5 +1,5 @@
 #include "ezalloc_internal.h"
-#include <errno.h>
+
 #include <stdio.h>
 
 /* Creates a new node for the garbage collector list */

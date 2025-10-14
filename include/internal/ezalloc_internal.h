@@ -2,7 +2,9 @@
 # define EZALLOC_INTERNAL_H
 
 # include <stdlib.h>
-# include <string.h>	
+# include <string.h>
+# include <errno.h>
+# include <stdint.h>
 
 # define NO_BYTES	0
 # define NO_DATA	NULL
@@ -96,7 +98,8 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage
  */
 void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name);
 
-/**** Error Message Handling ****/
+/* Zeroes out the allocated memory */
+void	zero_memory(void *ptr, size_t total_size);
 
 /*
  * set_error - Sets the last error message

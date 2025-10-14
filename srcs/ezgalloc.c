@@ -1,16 +1,5 @@
 #include "ezalloc_internal.h"
 #include "ezgalloc.h"
-#include <stdint.h>
-#include <string.h>
-#include <errno.h>
-
-/* Zeroes out the allocated memory */
-static void	zero_memory(void *ptr, size_t total_size)
-{
-	if (!ptr)
-		return;
-	memset(ptr, 0, total_size);
-}
 
 char	*ezg_get_error(void)
 {
