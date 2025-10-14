@@ -3,41 +3,104 @@
 
 # include <stddef.h>
 
-/* Return the last error encountered in the perror format */
+/*
+ * ezg_get_error - Retrieves the last error message
+ *
+ * Return: A string describing the last error that occurred, or NULL if no error
+ */
 char    *ezg_get_error(void);
 
-/* Allocates size bytes of memory with malloc() and saves
- * the pointer in a static linked list named ${group}, before returning it.
- * Every list will be managed separatly from the others.
- * Returns NULL if malloc fails. */
+/*
+ * ezg_alloc - Allocates and tracks memory in a named group
+ *
+ * @group: Name of the group to allocate in
+ * @size:  Number of bytes to allocate
+ *
+ * Allocates size bytes of memory and saves the pointer in a named
+ * linked list (group) for separate management.
+ *
+ * Return: Pointer to the allocated memory, or NULL if allocation fails.
+ *         On failure, sets errno to ENOMEM or EINVAL if group not found.
+ */
 void	*ezg_alloc(char *group, size_t size);
 
-/* Allocates size * count bytes of memory with malloc(), fills
- * everything with 0s and saves the pointer in a static linked list,
- * before returning it.
- * Every "group" is a different list which can be managed separatly from the other.
- * Returns NULL if malloc fails.*/
+/*
+ * ezg_calloc - Allocates and zeros memory in a named group
+ *
+ * @group: Name of the group to allocate in
+ * @size:  Size of each element
+ * @count: Number of elements
+ *
+ * Allocates size * count bytes of memory, zeros it, and saves the pointer
+ * in a named linked list (group) for separate management.
+ *
+ * Return: Pointer to the zeroed memory, or NULL if allocation fails or
+ *         if size * count would overflow. On overflow, sets errno to EOVERFLOW.
+ *         On allocation failure, sets errno to ENOMEM or EINVAL if group not found.
+ */
 void	*ezg_calloc(char *group, size_t size, size_t count);
 
-/* Add an already allocated address at the end of the ${group} named linked list.
- * Return the pointer we passed it. */
+/*
+ * ezg_add - Adds an existing pointer to a named group
+ *
+ * @group: Name of the group to add the pointer to
+ * @data:  Pointer to memory previously allocated with malloc/calloc
+ *
+ * Adds an already allocated address to the named group's garbage collector list.
+ *
+ * Return: The pointer passed as argument, or NULL if the operation fails.
+ *         On failure, sets errno to ENOMEM or EINVAL if group not found.
+ */
 void	*ezg_add(char *group, void *data);
 
-/* Search for the pointer in the "group" list, and frees the pointer*/
+/*
+ * ezg_release - Frees a specific tracked pointer in a group
+ *
+ * @group: Name of the group
+ * @data:  Pointer to free
+ *
+ * Searches for the pointer in the group's tracked list and frees it immediately.
+ */
 void    ezg_release(char *group, void *data);
 
-/* Create a new named garbage list.
- * If a group named ${group} already exists, fails.
- * Returns 0 on success. */
+/*
+ * ezg_group_create - Creates a new named group
+ *
+ * @group: Name for the new group
+ *
+ * Creates a new named garbage collector group. If a group with the same
+ * name already exists, the operation fails.
+ *
+ * Return: 0 on success, 1 on failure. On failure, sets errno to EEXIST
+ *         if group already exists, or ENOMEM if allocation fails.
+ */
 int		ezg_group_create(char *group);
 
-/* Frees all the memory in the ${group} but keeps the group alive. */
+/*
+ * ezg_group_release - Frees all memory in a group
+ *
+ * @group: Name of the group to release
+ *
+ * Frees all tracked memory in the specified group but keeps the group
+ * structure alive for future allocations.
+ */
 void	ezg_group_release(char *group);
 
-/* Deletes the group and frees all its memory. */
+/*
+ * ezg_group_delete - Deletes a group and frees its memory
+ *
+ * @group: Name of the group to delete
+ *
+ * Frees all tracked memory in the specified group and removes the group itself.
+ */
 void	ezg_group_delete(char *group);
 
-/* Frees all the memory previously allocated in all groups. */
+/*
+ * ezg_cleanup - Frees all groups and their memory
+ *
+ * Deletes all groups and frees all tracked memory across all groups.
+ * Cleans up error messages.
+ */
 void	ezg_cleanup(void);
 
 #endif

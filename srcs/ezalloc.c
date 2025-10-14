@@ -2,8 +2,10 @@
 #include "ezalloc_internal.h"
 #include <stdint.h>
 #include <string.h>
+#include <errno.h>
 
 
+/* Zeroes out the allocated memory */
 static void	zero_memory(void *ptr, size_t total_size)
 {
 	if (!ptr)
@@ -16,6 +18,7 @@ char	*ez_get_error(void)
 	return (get_error());
 }
 
+/* Wrapper for allocation_handler with static garbage collector */
 static void	*ez_alloc_handler(size_t size, int mode, void *target)
 {	
 	static t_garbage	garbage;
@@ -32,7 +35,10 @@ void	*ez_calloc(size_t size, size_t count)
 	void	*new_ptr;
 
 	if (count != 0 && size > SIZE_MAX / count)
+	{
+		errno = EOVERFLOW;
 		return (NULL);
+	}
 	new_ptr = ez_alloc_handler(size * count, NEW, NO_DATA);
 	zero_memory(new_ptr, size * count);
 	return (new_ptr);
