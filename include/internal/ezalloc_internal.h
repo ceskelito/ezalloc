@@ -19,8 +19,8 @@
 # include <string.h>
 
 # define NO_BYTES 0
-# define NO_DATA NULL
-# define NO_GROUP NULL
+# define NO_DATA 0
+# define NO_GROUP 0
 
 typedef enum e_action
 {
@@ -28,9 +28,9 @@ typedef enum e_action
 	ADD,
 	RELEASE,
 	CLEANUP,
-	CREATE_GROUP,  // only for groups
-	RELEASE_GROUP, // only for groups
-	DELETE_GROUP   // only for groups
+	CREATE_GROUP,
+	RELEASE_GROUP,
+	DELETE_GROUP
 }					t_action;
 
 typedef enum e_err_action
@@ -85,9 +85,8 @@ typedef struct s_group_context
  *         or NULL if allocation fails or for CLEANUP/RELEASE modes.
  *         Sets errno to ENOMEM on allocation failures.
  */
-void				*allocation_handler(size_t size, int mode, void *target,
-						t_garbage *garbage);
-
+void	*allocation_handler(size_t size, int mode, void *target,
+			t_garbage *garbage);
 /*
  * ezg_alloc_handler - Groups allocation handler
  *
@@ -103,15 +102,13 @@ void				*allocation_handler(size_t size, int mode, void *target,
  * @name:   Name of the group to operate on. Must not be NULL except
  *          for CLEANUP mode.
  *
-
-	* Return: Pointer to allocated memory or created group for NEW/ADD/CREATE_GROUP,
+ * Return: Pointer to allocated memory or created group for NEW/ADD/CREATE_GROUP,
  *         or NULL for other modes or on failure.
  *         Sets errno to ENOMEM on allocation failures, EINVAL for invalid
  *         arguments or missing groups, and EEXIST when trying to create
- *         a group that already exists.
- */
-void				*ezg_alloc_handler(size_t size, int mode, void *target,
-						char *name);
+ *         a group that already exists. */
+void	*ezg_alloc_handler(size_t size, int mode, void *target,
+			char *name);
 
 /*
  * set_error - Sets the last error message
@@ -121,26 +118,26 @@ void				*ezg_alloc_handler(size_t size, int mode, void *target,
  * Stores a copy of the error message for later retrieval.
  * Sets errno to ENOMEM if internal_strdup fails.
  */
-void				set_error(char *str);
+void	set_error(char *str);
 
 /*
  * get_error - Retrieves the last error message
  *
  * Return: The last error message string, or NULL if no error
  */
-char				*get_error(void);
+char	*get_error(void);
 
 /*
  * free_error - Frees the stored error message
  *
  * Cleans up the error message storage.
  */
-void				free_error(void);
+void	free_error(void);
 
 /* Libraries Helper Functions*/
-char				*internal_strdup(char *s);
-int					internal_strcmp(char *s1, char *s2);
-void				*internal_calloc(size_t nmemb, size_t size);
-void				internal_bzero(void *s, size_t n);
+char	*internal_strdup(char *s);
+int		internal_strcmp(char *s1, char *s2);
+void	*internal_calloc(size_t nmemb, size_t size);
+void	internal_bzero(void *s, size_t n);
 
 #endif
