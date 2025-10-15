@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:24:43 by rceschel          #+#    #+#             */
-/*   Updated: 2025/10/15 12:25:29 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/10/15 12:43:11 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 /*
  * ez_get_error - Retrieves the last error message
  *
- * Return: A string describing the last error that occurred, or NULL if no error
- */
-char    *ez_get_error(void);
+ * Return: A string describing the last error that occurred,
+ * or NULL if no error.*/
+char	*ez_get_error(void);
 
 /*
  * ez_alloc - Allocates and tracks memory
@@ -31,8 +31,7 @@ char    *ez_get_error(void);
  * in a static linked list for automatic cleanup later.
  *
  * Return: Pointer to the allocated memory, or NULL if allocation fails.
- *         On failure, sets errno to ENOMEM.
- */
+ *         On failure, sets errno to ENOMEM. */
 void	*ez_alloc(size_t size);
 
 /*
@@ -46,8 +45,7 @@ void	*ez_alloc(size_t size);
  *
  * Return: Pointer to the zeroed memory, or NULL if allocation fails or
  *         if size * count would overflow. On overflow, sets errno to EOVERFLOW.
- *         On allocation failure, sets errno to ENOMEM.
- */
+ *         On allocation failure, sets errno to ENOMEM. */
 void	*ez_calloc(size_t size, size_t count);
 
 /*
@@ -59,8 +57,7 @@ void	*ez_calloc(size_t size, size_t count);
  * so it will be freed when ez_cleanup() is called.
  *
  * Return: The pointer passed as argument, or NULL if the operation fails.
- *         On failure, sets errno to ENOMEM.
- */
+ *         On failure, sets errno to ENOMEM. */
 void	*ez_add(void *data);
 
 /*
@@ -69,16 +66,14 @@ void	*ez_add(void *data);
  * @data: Pointer to free
  *
  * Searches for the pointer in the tracked list and frees it immediately,
- * removing it from the garbage collector.
- */
+ * removing it from the garbage collector. */
 void	ez_release(void	*data);
 
 /*
  * ez_cleanup - Frees all tracked memory
  *
  * Frees all memory previously allocated by ez_alloc() and ez_calloc(),
- * and all pointers added with ez_add(). Cleans up error messages.
- */
+ * and all pointers added with ez_add(). Cleans up error messages. */
 void	ez_cleanup(void);
 
 #endif

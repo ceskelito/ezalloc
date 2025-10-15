@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:24:46 by rceschel          #+#    #+#             */
-/*   Updated: 2025/10/15 12:25:28 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/10/15 12:46:01 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 /*
  * ezg_get_error - Retrieves the last error message
  *
- * Return: A string describing the last error that occurred, or NULL if no error
- */
-char    *ezg_get_error(void);
+ * Return: A string describing the last error that occurred,
+ * or NULL if no error. */
+char	*ezg_get_error(void);
 
 /*
  * ezg_alloc - Allocates and tracks memory in a named group
@@ -32,8 +32,7 @@ char    *ezg_get_error(void);
  * linked list (group) for separate management.
  *
  * Return: Pointer to the allocated memory, or NULL if allocation fails.
- *         On failure, sets errno to ENOMEM or EINVAL if group not found.
- */
+ *         On failure, sets errno to ENOMEM or EINVAL if group not found. */
 void	*ezg_alloc(char *group, size_t size);
 
 /*
@@ -48,8 +47,8 @@ void	*ezg_alloc(char *group, size_t size);
  *
  * Return: Pointer to the zeroed memory, or NULL if allocation fails or
  *         if size * count would overflow. On overflow, sets errno to EOVERFLOW.
- *         On allocation failure, sets errno to ENOMEM or EINVAL if group not found.
- */
+ *         On allocation failure, sets errno to ENOMEM or EINVAL
+ *         if group not found. */
 void	*ezg_calloc(char *group, size_t size, size_t count);
 
 /*
@@ -61,8 +60,7 @@ void	*ezg_calloc(char *group, size_t size, size_t count);
  * Adds an already allocated address to the named group's garbage collector list.
  *
  * Return: The pointer passed as argument, or NULL if the operation fails.
- *         On failure, sets errno to ENOMEM or EINVAL if group not found.
- */
+ *         On failure, sets errno to ENOMEM or EINVAL if group not found. */
 void	*ezg_add(char *group, void *data);
 
 /*
@@ -71,9 +69,9 @@ void	*ezg_add(char *group, void *data);
  * @group: Name of the group
  * @data:  Pointer to free
  *
- * Searches for the pointer in the group's tracked list and frees it immediately.
- */
-void    ezg_release(char *group, void *data);
+ * Searches for the pointer in the group's tracked list
+ * and frees it immediately. */
+void	ezg_release(char *group, void *data);
 
 /*
  * ezg_group_create - Creates a new named group
@@ -84,8 +82,7 @@ void    ezg_release(char *group, void *data);
  * name already exists, the operation fails.
  *
  * Return: 0 on success, 1 on failure. On failure, sets errno to EEXIST
- *         if group already exists, or ENOMEM if allocation fails.
- */
+ *         if group already exists, or ENOMEM if allocation fails. */
 int		ezg_group_create(char *group);
 
 /*
@@ -94,8 +91,7 @@ int		ezg_group_create(char *group);
  * @group: Name of the group to release
  *
  * Frees all tracked memory in the specified group but keeps the group
- * structure alive for future allocations.
- */
+ * structure alive for future allocations. */
 void	ezg_group_release(char *group);
 
 /*
@@ -103,16 +99,15 @@ void	ezg_group_release(char *group);
  *
  * @group: Name of the group to delete
  *
- * Frees all tracked memory in the specified group and removes the group itself.
- */
+ * Frees all tracked memory in the specified group
+ * and removes the group itself. */
 void	ezg_group_delete(char *group);
 
 /*
  * ezg_cleanup - Frees all groups and their memory
  *
  * Deletes all groups and frees all tracked memory across all groups.
- * Cleans up error messages.
- */
+ * Cleans up error messages. */
 void	ezg_cleanup(void);
 
 #endif
