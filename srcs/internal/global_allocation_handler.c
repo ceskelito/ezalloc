@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:24:50 by rceschel          #+#    #+#             */
-/*   Updated: 2025/10/15 12:25:27 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/10/15 13:11:03 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static t_alloc	*new_node(void *ptr)
 	if (!node)
 	{
 		errno = ENOMEM;
-		set_error("ezalloc: malloc failed for node");
+		set_error("malloc failed for node");
 		return (NULL);
 	}
 	node->data = ptr;
@@ -115,13 +115,13 @@ void	*allocation_handler(size_t size, int mode, void *target,
 		if (!new_ptr)
 		{
 			errno = ENOMEM;
-			set_error("ezalloc: malloc failed");
+			set_error("malloc failed");
 			return (NULL);
 		}
 		if (!safe_new_node(garbage, new_ptr))
 		{
 			errno = ENOMEM;
-			set_error("ezalloc: failed to create new node");
+			set_error("failed to create new node");
 			free(new_ptr);
 			return (NULL);
 		}
@@ -133,7 +133,7 @@ void	*allocation_handler(size_t size, int mode, void *target,
 		if (!new_ptr)
 		{
 			errno = ENOMEM;
-			set_error("ezalloc: failed to create new node");
+			set_error("failed to create new node");
 		}
 		return (new_ptr);
 	}

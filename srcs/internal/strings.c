@@ -6,12 +6,37 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:25:00 by rceschel          #+#    #+#             */
-/*   Updated: 2025/10/15 12:25:25 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/10/15 13:05:29 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
 #include <stdlib.h>
+
+unsigned int	internal_strlcat(char *dest, const char *src, unsigned int size)
+{
+	unsigned int	i;
+	unsigned int	l;
+	unsigned int	j;
+
+	l = 0;
+	while (dest[l] != '\0' && l < size)
+		l++;
+	j = 0;
+	while (src[j] != '\0')
+		j++;
+	i = 0;
+	if (size == 0 || l == size)
+		return (l + j);
+	while (i < size - l - 1 && src[i] != '\0')
+	{
+		dest[l + i] = src[i];
+		i++;
+	}
+	dest[l + i] = '\0';
+	return (l + j);
+}
+
 
 static int	internal_strlen(char *str)
 {

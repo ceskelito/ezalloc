@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:24:53 by rceschel          #+#    #+#             */
-/*   Updated: 2025/10/15 13:01:26 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/10/15 13:28:25 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,7 @@ static t_group	*safe_new_group(t_group **head, t_group **tail, char *name)
 void	delete_all_groups(t_group_context *groups)
 {
 	while (groups->head)
-	{
 		ezg_alloc_handler(NO_BYTES, DELETE_GROUP, NO_DATA, groups->head->name);
-	}
 	groups->tail = NULL;
 }
 
@@ -98,23 +96,19 @@ void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
 	if (mode == CLEANUP)
 		return (delete_all_groups(&groups), NULL);
 	if (!name)
-		return (errno = EINVAL, set_error("ezalloc: group name is NULL"),
-			NULL);
+		return (errno = EINVAL, set_error("group name is NULL"), NULL);
 	group = get_group(groups.head, name);
 	if (mode == CREATE_GROUP)
 	{
 		if (group)
-			return (errno = EEXIST, set_error("ezalloc: group already exists"),
-				NULL);
-		group = safe_new_group(&groups.head, &groups.tail, name);
+			return (errno = EEXIST, set_error("group already exists"), NULL);
+		group = safe_new_group(&groups.head, &groups.tail, name)
 		if (!group)
-			return (errno = ENOMEM, set_error("ezalloc: failed to create group"),
-				NULL);
+			return (errno = ENOMEM, set_error("failed to create group"), NULL);
 		return (group);
 	}
 	if (!group)
-		return (errno = EINVAL, set_error("ezalloc: group not found"),
-			NULL);
+		return (errno = EINVAL, set_error("group not found"), NULL);
 	if (mode == RELEASE_GROUP || mode == DELETE_GROUP)
 	{
 		allocation_handler(size, CLEANUP, NO_DATA, group->garbage);
