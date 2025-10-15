@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ezalloc_internal.h                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/15 12:24:38 by rceschel          #+#    #+#             */
+/*   Updated: 2025/10/15 12:25:29 by rceschel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EZALLOC_INTERNAL_H
 # define EZALLOC_INTERNAL_H
 
-# include <stdlib.h>
-# include <string.h>
 # include <errno.h>
 # include <stdint.h>
+# include <stdlib.h>
+# include <string.h>
 
-# define NO_BYTES	0
-# define NO_DATA	NULL
-# define NO_GROUP	NULL
+# define NO_BYTES 0
+# define NO_DATA NULL
+# define NO_GROUP NULL
 
 typedef enum e_action
 {
@@ -16,46 +28,46 @@ typedef enum e_action
 	ADD,
 	RELEASE,
 	CLEANUP,
-	CREATE_GROUP,	// only for groups
-	RELEASE_GROUP,	// only for groups
-	DELETE_GROUP	// only for groups
-} t_action;
+	CREATE_GROUP,  // only for groups
+	RELEASE_GROUP, // only for groups
+	DELETE_GROUP   // only for groups
+}					t_action;
 
 typedef enum e_err_action
 {
 	GET,
 	SET,
 	CLEAN
-} t_err_action;
+}					t_err_action;
 
 /* garbage collector node */
 typedef struct s_alloc
 {
 	void			*data;
 	struct s_alloc	*next;
-}	t_alloc;
+}					t_alloc;
 
 /* garbage node */
 typedef struct s_garbage
 {
-	t_alloc         *head;
-	t_alloc         *tail;
-} t_garbage;
+	t_alloc			*head;
+	t_alloc			*tail;
+}					t_garbage;
 
 /* garbage group node */
 typedef struct s_group
 {
 	t_garbage		*garbage;
-	char            *name;
-	struct s_group  *next;
+	char			*name;
+	struct s_group	*next;
 	struct s_group	*prev;
-} t_group;
+}					t_group;
 
 typedef struct s_group_context
 {
-	t_group	*head;
-	t_group	*tail;
-} t_group_context;
+	t_group			*head;
+	t_group			*tail;
+}					t_group_context;
 
 /*
  * allocation_handler - Global allocation handler
@@ -73,7 +85,8 @@ typedef struct s_group_context
  *         or NULL if allocation fails or for CLEANUP/RELEASE modes.
  *         Sets errno to ENOMEM on allocation failures.
  */
-void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage);
+void				*allocation_handler(size_t size, int mode, void *target,
+						t_garbage *garbage);
 
 /*
  * ezg_alloc_handler - Groups allocation handler
@@ -90,13 +103,15 @@ void	*allocation_handler(size_t size, int mode, void *target, t_garbage *garbage
  * @name:   Name of the group to operate on. Must not be NULL except
  *          for CLEANUP mode.
  *
- * Return: Pointer to allocated memory or created group for NEW/ADD/CREATE_GROUP,
+
+	* Return: Pointer to allocated memory or created group for NEW/ADD/CREATE_GROUP,
  *         or NULL for other modes or on failure.
  *         Sets errno to ENOMEM on allocation failures, EINVAL for invalid
  *         arguments or missing groups, and EEXIST when trying to create
  *         a group that already exists.
  */
-void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name);
+void				*ezg_alloc_handler(size_t size, int mode, void *target,
+						char *name);
 
 /*
  * set_error - Sets the last error message
@@ -106,26 +121,26 @@ void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name);
  * Stores a copy of the error message for later retrieval.
  * Sets errno to ENOMEM if internal_strdup fails.
  */
-void	set_error(char	*str);
+void				set_error(char *str);
 
 /*
  * get_error - Retrieves the last error message
  *
  * Return: The last error message string, or NULL if no error
  */
-char	*get_error(void);
+char				*get_error(void);
 
 /*
  * free_error - Frees the stored error message
  *
  * Cleans up the error message storage.
  */
-void	free_error(void);
+void				free_error(void);
 
 /* Libraries Helper Functions*/
-char	*internal_strdup(char *s);
-int		internal_strcmp(char *s1, char *s2);
-void	*internal_calloc(size_t nmemb, size_t size);
-void	internal_bzero(void *s, size_t n);
+char				*internal_strdup(char *s);
+int					internal_strcmp(char *s1, char *s2);
+void				*internal_calloc(size_t nmemb, size_t size);
+void				internal_bzero(void *s, size_t n);
 
 #endif
