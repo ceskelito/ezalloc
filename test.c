@@ -357,7 +357,7 @@ int main(void)
 	// Commenting out to allow test to complete successfully
 	// Final cleanup
 	ez_cleanup();
-	// ezg_cleanup();
+	ezg_cleanup();
 	
 	printf("\n");
 	printf("╔════════════════════════════════════════════════════════════╗\n");
