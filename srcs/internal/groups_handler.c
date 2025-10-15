@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:24:53 by rceschel          #+#    #+#             */
-/*   Updated: 2025/10/15 12:25:26 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/10/15 13:01:26 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,25 +59,16 @@ static t_group	*safe_new_group(t_group **head, t_group **tail, char *name)
 		return (NULL);
 	group = internal_calloc(1, sizeof(t_group));
 	if (!group)
-	{
-		errno = ENOMEM;
-		return (NULL);
-	}
+		return (errno = ENOMEM, NULL);
 	group->name = internal_strdup(name);
 	if (!group->name)
-	{
-		errno = ENOMEM;
-		free(group);
-		return (NULL);
-	}
+		return (free(group),
+			errno = ENOMEM, NULL);
 	group->garbage = internal_calloc(1, sizeof(t_garbage));
 	if (!group->garbage)
-	{
-		errno = ENOMEM;
-		free(group->name);
-		free(group);
-		return (NULL);
-	}
+		return (free(group->name),
+			free(group),
+			errno = ENOMEM, NULL);
 	if (!*head)
 		*head = group;
 	else
@@ -89,6 +80,15 @@ static t_group	*safe_new_group(t_group **head, t_group **tail, char *name)
 	return (group);
 }
 
+void	delete_all_groups(t_group_context *groups)
+{
+	while (groups->head)
+	{
+		ezg_alloc_handler(NO_BYTES, DELETE_GROUP, NO_DATA, groups->head->name);
+	}
+	groups->tail = NULL;
+}
+
 /* You can find an exhaustive description in ezalloc_internal.h*/
 void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
 {
@@ -96,39 +96,25 @@ void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
 	t_group					*group;
 
 	if (mode == CLEANUP)
-	{
-		while (groups.head)
-			ezg_alloc_handler(NO_BYTES, DELETE_GROUP, NO_DATA,
-				groups.head->name);
-		groups.tail = NULL;
-		return (NULL);
-	}
+		return (delete_all_groups(&groups), NULL);
 	if (!name)
-	{
-		errno = EINVAL;
-		return (set_error("ezalloc: group name is NULL"), NULL);
-	}
+		return (errno = EINVAL, set_error("ezalloc: group name is NULL"),
+			NULL);
 	group = get_group(groups.head, name);
 	if (mode == CREATE_GROUP)
 	{
 		if (group)
-		{
-			errno = EEXIST;
-			return (set_error("ezalloc: group already exists"), NULL);
-		}
+			return (errno = EEXIST, set_error("ezalloc: group already exists"),
+				NULL);
 		group = safe_new_group(&groups.head, &groups.tail, name);
 		if (!group)
-		{
-			errno = ENOMEM;
-			return (set_error("ezalloc: failed to create group"), NULL);
-		}
+			return (errno = ENOMEM, set_error("ezalloc: failed to create group"),
+				NULL);
 		return (group);
 	}
 	if (!group)
-	{
-		errno = EINVAL;
-		return (set_error("ezalloc: group not found"), NULL);
-	}
+		return (errno = EINVAL, set_error("ezalloc: group not found"),
+			NULL);
 	if (mode == RELEASE_GROUP || mode == DELETE_GROUP)
 	{
 		allocation_handler(size, CLEANUP, NO_DATA, group->garbage);
