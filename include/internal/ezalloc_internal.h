@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:24:38 by rceschel          #+#    #+#             */
-/*   Updated: 2025/10/15 18:48:31 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/10/15 18:49:25 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ typedef struct s_group_context
  *         or NULL if allocation fails or for CLEANUP/RELEASE modes.
  *         Sets errno to ENOMEM on allocation failures.
  */
-void	*allocation_handler(size_t size, int mode, void *target,
-			t_garbage *garbage);
+void				*allocation_handler(size_t size, int mode, void *target,
+						t_garbage *garbage);
 /*
  * ezg_alloc_handler - Groups allocation handler
  *
@@ -106,11 +106,11 @@ void	*allocation_handler(size_t size, int mode, void *target,
  *         Sets errno to ENOMEM on allocation failures, EINVAL for invalid
  *         arguments or missing groups, and EEXIST when trying to create
  *         a group that already exists. */
-void	*ezg_alloc_handler(size_t size, int mode, void *target,
-			char *name);
+void				*ezg_alloc_handler(size_t size, int mode, void *target,
+						char *name);
 
 /* Wrapper for allocation_handler with static garbage collector */
-void	*ez_alloc_handler(size_t size, int mode, void *target);
+void				*ez_alloc_handler(size_t size, int mode, void *target);
 
 /*
  * set_error - Sets the last error message
@@ -120,47 +120,50 @@ void	*ez_alloc_handler(size_t size, int mode, void *target);
  * Stores a copy of the error message for later retrieval.
  * Sets errno to ENOMEM if internal_strdup fails.
  */
-void	set_error(int errnum, char *str);
+void				set_error(int errnum, char *str);
 
 /*
  * get_error - Retrieves the last error message
  *
  * Return: The last error message string, or NULL if no error
  */
-char	*get_error(void);
+char				*get_error(void);
 
 /*
  * free_error - Frees the stored error message
  *
  * Cleans up the error message storage.
  */
-void	free_error(void);
+void				free_error(void);
 
 /* Strings */
-int				internal_strlen(char *str);
-int				internal_strcmp(char *s1, char *s2);
-unsigned int	internal_strlcat(char *dest, const char *src, unsigned int size);
-char			*internal_strdup(char *s);
-size_t			internal_strlcpy(char *dest, char *src, size_t size);
+int					internal_strlen(char *str);
+int					internal_strcmp(char *s1, char *s2);
+unsigned int		internal_strlcat(char *dest, const char *src,
+						unsigned int size);
+char				*internal_strdup(char *s);
+size_t				internal_strlcpy(char *dest, char *src, size_t size);
 
 /* Memory */
-void	*internal_calloc(size_t nmemb, size_t size);
-void	internal_bzero(void *s, size_t n);
+void				*internal_calloc(size_t nmemb, size_t size);
+void				internal_bzero(void *s, size_t n);
 
 /* Helpers */
-t_group	*create_group_helper(t_group_context *groups, char *name);
-void	delete_all_groups(t_group_context *groups);
-void	*new_node_helper(t_garbage *garbage, void *new_ptr, size_t size);
+t_group				*create_group_helper(t_group_context *groups, char *name);
+void				delete_all_groups(t_group_context *groups);
+void				*new_node_helper(t_garbage *garbage, void *new_ptr,
+						size_t size);
 
 /* Groups Handler */
-void	delete_group(t_group **head, t_group **tail, t_group *group);
-t_group	*get_group(t_group *head, char *name);
-t_group	*safe_new_group(t_group **head, t_group **tail, char *name);
+void				delete_group(t_group **head, t_group **tail,
+						t_group *group);
+t_group				*get_group(t_group *head, char *name);
+t_group				*safe_new_group(t_group **head, t_group **tail, char *name);
 
 /* Global Handler */
-t_alloc	*new_node(void *ptr);
-void	*safe_new_node(t_garbage *garbage, void *ptr);
-void	cleanup_list(t_garbage *garbage);
-void	release_node(t_garbage *garbage, void *target_data);
+t_alloc				*new_node(void *ptr);
+void				*safe_new_node(t_garbage *garbage, void *ptr);
+void				cleanup_list(t_garbage *garbage);
+void				release_node(t_garbage *garbage, void *target_data);
 
 #endif

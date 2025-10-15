@@ -11,10 +11,13 @@ SDIR 	= srcs
 ODIR 	= objs
 
 FILES	= 	ezalloc \
+			ezalloc_helper \
 			ezgalloc \
+			ezgalloc_helper \
 			global_allocation_handler \
 			groups_handler \
-			utils \
+			helpers \
+			error_message_handler \
 			strings \
 			memory
 

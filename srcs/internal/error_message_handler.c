@@ -6,41 +6,42 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:25:02 by rceschel          #+#    #+#             */
-/*   Updated: 2025/10/15 13:10:30 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/10/15 17:23:21 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ezalloc_internal.h"
 
-static char	*strjoin(char const *s1, char const *s2)
+static char	*strjoin(char *s1, char *s2)
 {
 	char	*str;
 	size_t	len1;
 	size_t	len2;
 
 	if (!s1 && !s2)
-		return (ft_calloc(1, sizeof(char)));
+		return (internal_calloc(1, sizeof(char)));
 	if (!s1)
-		return (ft_strdup(s2));
+		return (internal_strdup(s2));
 	else if (!s2)
-		return (ft_strdup(s1));
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	str = ft_calloc(len1 + len2 + 1, sizeof(char));
+		return (internal_strdup(s1));
+	len1 = internal_strlen(s1);
+	len2 = internal_strlen(s2);
+	str = internal_calloc(len1 + len2 + 1, sizeof(char));
 	if (str == NULL)
 		return (NULL);
-	ft_strlcpy(str, s1, len1 + 1);
-	ft_strlcat(str, s2, len1 + len2 + 1);
+	internal_strlcpy(str, s1, len1 + 1);
+	internal_strlcat(str, s2, len1 + len2 + 1);
 	return (str);
 }
 
 /* Manages the last error message (set, get, or clean) */
-static char	*error_handler(int action, char *str)
+static char	*error_handler(int action, int errnum, char *str)
 {
 	static char	*last_error;
 
 	if (action == SET)
 	{
+		errno = errnum;
 		free(last_error);
 		last_error = NULL;
 		if (!str)
@@ -59,17 +60,17 @@ static char	*error_handler(int action, char *str)
 	return (NULL);
 }
 
-inline void	set_error(char *str)
+inline void	set_error(int errnum, char *str)
 {
-	error_handler(SET, str);
+	error_handler(SET, errnum, str);
 }
 
 inline char	*get_error(void)
 {
-	return (error_handler(GET, NULL));
+	return (error_handler(GET, 0, NULL));
 }
 
 inline void	free_error(void)
 {
-	error_handler(CLEAN, NULL);
+	error_handler(CLEAN, 0, NULL);
 }

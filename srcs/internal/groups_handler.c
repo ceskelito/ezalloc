@@ -6,16 +6,16 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:24:53 by rceschel          #+#    #+#             */
-/*   Updated: 2025/10/15 13:28:25 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/10/15 18:35:14 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ezalloc.h"
 #include "ezalloc_internal.h"
-#include <stdio.h>
+// #include <stdio.h>
 
 /* Removes a group from the linked list and frees its resources */
-static void	delete_group(t_group **head, t_group **tail, t_group *group)
+void	delete_group(t_group **head, t_group **tail, t_group *group)
 {
 	if (!group)
 		return ;
@@ -34,7 +34,7 @@ static void	delete_group(t_group **head, t_group **tail, t_group *group)
 
 /* Searches for a group by name in the linked list.
  * Returns a pointer to the name group */
-static t_group	*get_group(t_group *head, char *name)
+t_group	*get_group(t_group *head, char *name)
 {
 	t_group	*curr;
 
@@ -51,7 +51,7 @@ static t_group	*get_group(t_group *head, char *name)
 }
 
 /* Creates a new group and adds it to the linked list */
-static t_group	*safe_new_group(t_group **head, t_group **tail, char *name)
+t_group	*safe_new_group(t_group **head, t_group **tail, char *name)
 {
 	t_group	*group;
 
@@ -80,13 +80,6 @@ static t_group	*safe_new_group(t_group **head, t_group **tail, char *name)
 	return (group);
 }
 
-void	delete_all_groups(t_group_context *groups)
-{
-	while (groups->head)
-		ezg_alloc_handler(NO_BYTES, DELETE_GROUP, NO_DATA, groups->head->name);
-	groups->tail = NULL;
-}
-
 /* You can find an exhaustive description in ezalloc_internal.h*/
 void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
 {
@@ -94,21 +87,17 @@ void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
 	t_group					*group;
 
 	if (mode == CLEANUP)
-		return (delete_all_groups(&groups), NULL);
+		return (delete_all_groups(&groups),
+			NULL);
 	if (!name)
-		return (errno = EINVAL, set_error("group name is NULL"), NULL);
-	group = get_group(groups.head, name);
+		return (set_error(EINVAL, "group name is NULL"),
+			NULL);
 	if (mode == CREATE_GROUP)
-	{
-		if (group)
-			return (errno = EEXIST, set_error("group already exists"), NULL);
-		group = safe_new_group(&groups.head, &groups.tail, name)
-		if (!group)
-			return (errno = ENOMEM, set_error("failed to create group"), NULL);
-		return (group);
-	}
+		return (create_group_helper(&groups, name));
+	group = get_group(groups.head, name);
 	if (!group)
-		return (errno = EINVAL, set_error("group not found"), NULL);
+		return (set_error(EINVAL, "group not found"),
+			NULL);
 	if (mode == RELEASE_GROUP || mode == DELETE_GROUP)
 	{
 		allocation_handler(size, CLEANUP, NO_DATA, group->garbage);

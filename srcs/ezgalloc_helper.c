@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ezgalloc.c                                         :+:      :+:    :+:   */
+/*   ezgalloc_helper.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,37 +13,24 @@
 #include "ezalloc_internal.h"
 #include "ezgalloc.h"
 
-void	*ezg_alloc(char *name, size_t size)
+char	*ezg_get_error(void)
 {
-	return (ezg_alloc_handler(size, NEW, NO_DATA, name));
+	return (get_error());
 }
 
-void	*ezg_calloc(char *name, size_t size, size_t count)
+int	ezg_group_create(char *name)
 {
-	void	*new_ptr;
-
-	if (count != 0 && size > SIZE_MAX / count)
-	{
-		errno = EOVERFLOW;
-		return (NULL);
-	}
-	new_ptr = ezg_alloc_handler(size * count, NEW, NO_DATA, name);
-	internal_bzero(new_ptr, size * count);
-	return (new_ptr);
+	if (!ezg_alloc_handler(NO_BYTES, CREATE_GROUP, NO_DATA, name))
+		return (1);
+	return (0);
 }
 
-void	*ezg_add(char *name, void *data)
+void	ezg_group_release(char *name)
 {
-	return (ezg_alloc_handler(NO_BYTES, ADD, data, name));
+	ezg_alloc_handler(NO_BYTES, RELEASE_GROUP, NO_DATA, name);
 }
 
-void	ezg_release(char *name, void *data)
+void	ezg_group_delete(char *name)
 {
-	ezg_alloc_handler(NO_BYTES, RELEASE, data, name);
-}
-
-void	ezg_cleanup(void)
-{
-	free_error();
-	ezg_alloc_handler(NO_BYTES, CLEANUP, NO_DATA, NO_GROUP);
+	ezg_alloc_handler(NO_BYTES, DELETE_GROUP, NO_DATA, name);
 }

@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:24:50 by rceschel          #+#    #+#             */
-/*   Updated: 2025/10/15 13:11:03 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/10/15 18:35:58 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,14 @@
 #include <stdio.h>
 
 /* Creates a new node for the garbage collector list */
-static t_alloc	*new_node(void *ptr)
+t_alloc	*new_node(void *ptr)
 {
 	t_alloc	*node;
 
 	node = malloc(sizeof(t_alloc));
 	if (!node)
 	{
-		errno = ENOMEM;
-		set_error("malloc failed for node");
+		set_error(ENOMEM, "malloc failed for node");
 		return (NULL);
 	}
 	node->data = ptr;
@@ -31,7 +30,7 @@ static t_alloc	*new_node(void *ptr)
 }
 
 /* Safely creates a new node and adds it to the garbage collector list */
-static void	*safe_new_node(t_garbage *garbage, void *ptr)
+void	*safe_new_node(t_garbage *garbage, void *ptr)
 {
 	t_alloc	*node;
 
@@ -54,7 +53,7 @@ static void	*safe_new_node(t_garbage *garbage, void *ptr)
 }
 
 /* Frees all nodes in the garbage collector list */
-static void	cleanup_list(t_garbage *garbage)
+void	cleanup_list(t_garbage *garbage)
 {
 	t_alloc	*curr;
 	t_alloc	*next;
@@ -74,7 +73,7 @@ static void	cleanup_list(t_garbage *garbage)
 }
 
 /* Removes and frees a specific node from the garbage collector list */
-static void	release_node(t_garbage *garbage, void *target_data)
+void	release_node(t_garbage *garbage, void *target_data)
 {
 	t_alloc	*curr;
 	t_alloc	*prev;
@@ -107,43 +106,21 @@ void	*allocation_handler(size_t size, int mode, void *target,
 {
 	void	*new_ptr;
 
+	new_ptr = NULL;
 	if (!garbage)
 		return (NULL);
 	if (mode == NEW)
-	{
-		new_ptr = malloc(size);
-		if (!new_ptr)
-		{
-			errno = ENOMEM;
-			set_error("malloc failed");
-			return (NULL);
-		}
-		if (!safe_new_node(garbage, new_ptr))
-		{
-			errno = ENOMEM;
-			set_error("failed to create new node");
-			free(new_ptr);
-			return (NULL);
-		}
-		return (new_ptr);
-	}
+		return (new_node_helper(garbage, new_ptr, size));
 	else if (mode == ADD)
 	{
 		new_ptr = safe_new_node(garbage, target);
 		if (!new_ptr)
-		{
-			errno = ENOMEM;
-			set_error("failed to create new node");
-		}
+			set_error(ENOMEM, "failed to create new node");
 		return (new_ptr);
 	}
 	else if (mode == CLEANUP)
-	{
 		cleanup_list(garbage);
-	}
 	else if (mode == RELEASE)
-	{
 		release_node(garbage, target);
-	}
 	return (NULL);
 }

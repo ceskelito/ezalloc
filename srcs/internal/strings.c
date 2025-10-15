@@ -6,7 +6,7 @@
 /*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:25:00 by rceschel          #+#    #+#             */
-/*   Updated: 2025/10/15 13:05:29 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/10/15 17:49:42 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ unsigned int	internal_strlcat(char *dest, const char *src, unsigned int size)
 	return (l + j);
 }
 
-
-static int	internal_strlen(char *str)
+int	internal_strlen(char *str)
 {
 	int	i;
 
@@ -48,7 +47,7 @@ static int	internal_strlen(char *str)
 	return (--i);
 }
 
-static size_t	internal_strlcpy(char *dest, char *src, size_t size)
+size_t	internal_strlcpy(char *dest, char *src, size_t size)
 {
 	size_t	i;
 
