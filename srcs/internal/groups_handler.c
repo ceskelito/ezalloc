@@ -81,7 +81,7 @@ static t_group *safe_new_group(t_group **head, t_group **tail, char *name)
 void	*ezg_alloc_handler(size_t size, int mode, void *target, char *name)
 {
     static t_group_context  groups;
-    t_group			        *group ;
+    t_group			        *group;
 
     if (mode == CLEANUP)
     {
