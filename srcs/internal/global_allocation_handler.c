@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   global_allocation_handler.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rceschel <rceschel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rceschel <rceschel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:24:50 by rceschel          #+#    #+#             */
-/*   Updated: 2025/10/15 18:35:58 by rceschel         ###   ########.fr       */
+/*   Updated: 2025/11/07 12:59:26 by rceschel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	cleanup_list(t_garbage *garbage)
 	{
 		next = curr->next;
 		free(curr->data);
+		curr->data = NULL;
 		free(curr);
 		curr = next;
 	}
@@ -93,7 +94,9 @@ void	release_node(t_garbage *garbage, void *target_data)
 			else
 				prev->next = curr->next;
 			free(curr->data);
+			curr->data = NULL;
 			free(curr);
+			curr = NULL;
 			return ;
 		}
 		prev = curr;
